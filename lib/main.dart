@@ -88,8 +88,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  int initialPrice = 300;
-  int price = 300;
+  int initialPrice = 0;
+  int price = 0;
   final _formKey = GlobalKey<FormBuilderState>();
   FormBuilder? formBuilder = const FormBuilder(child: Spacer());
   final _emailFieldKey = GlobalKey<FormBuilderFieldState>();
@@ -129,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
           constraints: BoxConstraints(maxWidth: 400),
           child: SingleChildScrollView(
             child: Column(
-              children: [ formBuilder!, Text("Cena: $price") ]
+              children: [ formBuilder!, Text("Celková cena: $price") ]
               ,
             ),
           ),
@@ -147,6 +147,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ToastHelper.Show("událost nenalezena", severity: ToastSeverity.NotOk);
       return;
     }
+    initialPrice = occasion.price??0;
+    price = initialPrice;
+
     var groups = await DataService.getAllOptionGroups(occasion.id!);
     var taxis = groups.firstWhere((element) => element.id == 1);
     var foods = groups.firstWhere((element) => element.id == 2);
@@ -155,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
     for (var element in taxis.options!) {
       taxiOptions.add(FormBuilderFieldOption<OptionModel>(value: element));
     }
-    var taxiGroup = FormBuilderRadioGroup<OptionModel>(initialValue: taxis.options!.first, name: taxis.code!, options: taxiOptions, decoration: InputDecoration(labelText: taxis.name!),);
+    var taxiGroup = FormBuilderRadioGroup<OptionModel>(orientation: OptionsOrientation.vertical, initialValue: taxis.options!.first, name: taxis.code!, options: taxiOptions, decoration: InputDecoration(labelText: taxis.name!, labelStyle: TextStyle(fontSize: 20)),);
 
     var foodOptions  = <FormBuilderFieldOption<OptionModel>>[];
     for (var element in foods.options!) {
@@ -174,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
         price = endPrice;
       });
     }
-    var foodGroup = FormBuilderRadioGroup<OptionModel>(initialValue: foods.options!.first, name: foods.code!, options: foodOptions, decoration: InputDecoration(labelText: foods.name!),
+    var foodGroup = FormBuilderRadioGroup<OptionModel>(orientation: OptionsOrientation.vertical, initialValue: foods.options!.first, name: foods.code!, options: foodOptions, decoration: InputDecoration(labelText: foods.name!),
     onChanged: chng,);
 
     formBuilder = FormBuilder(
@@ -219,6 +222,8 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 10),
             taxiGroup,
             const SizedBox(height: 10),
+            FormBuilderTextField(name: "note", decoration: const InputDecoration(labelText: "Poznámka")),
+            const SizedBox(height: 10),
             MaterialButton(
               color: Theme.of(context).colorScheme.secondary,
               onPressed: () async {
@@ -232,10 +237,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     var email = _formKey.currentState?.fields['email']!.value;
                     var name = _formKey.currentState?.fields['name']!.value;
                     var surname = _formKey.currentState?.fields['surname']!.value;
+                    var note = _formKey.currentState?.fields['note']!.value;
 
                     var customer = CustomerModel(email: email, name: name, surname: surname);
 
-                    var ticket = TicketModel(occasion: occasion.id, price: price, options: [
+                    var ticket = TicketModel(occasion: occasion.id, price: price, note: note,
+                        options: [
                       _formKey.currentState?.fields[groups[0].code]!.value,
                       _formKey.currentState?.fields[groups[1].code]!.value
                     ]);

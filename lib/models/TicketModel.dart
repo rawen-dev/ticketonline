@@ -14,6 +14,8 @@ class TicketModel{
   static const String stateColumn = "state";
   static const String occasionColumn = "occasion";
   static const String priceColumn = "price";
+  static const String noteColumn = "note";
+
 
 
   static const String unpaidState = "unpaid";
@@ -22,6 +24,7 @@ class TicketModel{
   DateTime? createdAt;
   int? occasion;
   CustomerModel? customer;
+  String? note;
   String? state;
   SeatModel? seat;
   int? price;
@@ -33,6 +36,7 @@ class TicketModel{
     this.occasion,
     this.customer,
     this.state,
+    this.note,
     this.price,
     this.options
   });
@@ -44,6 +48,7 @@ class TicketModel{
       createdAt: DateTime.parse(json[createdAtColumn]),
       customer: json[customerColumn] != null ? CustomerModel(id: json[customerColumn]):null,
       state: json[stateColumn],
+      note: json[noteColumn],
       price: json[priceColumn],
     );
   }
@@ -53,6 +58,7 @@ class TicketModel{
       customerColumn: customer?.id,
       stateColumn: state??unpaidState,
       occasionColumn: occasion,
+      noteColumn: note,
       priceColumn: price
     };
     if(id != null)
