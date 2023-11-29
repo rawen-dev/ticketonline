@@ -141,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void loadData() async {
     var bs = Uri.base;
     var path = bs.path.substring(1);
-    var occasion = await DataService.getOccasionModelByLink(occasionLink??"");
+    var occasion = await DataService.getOccasionModelByLink("skautskyples"??"");
     if(occasion==null)
     {
       ToastHelper.Show("událost nenalezena", severity: ToastSeverity.NotOk);
