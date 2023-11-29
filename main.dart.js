@@ -24304,14 +24304,13 @@ Jb:function Jb(a){this.a=a},
 mk:function mk(a,b,c){this.c=a
 this.d=b
 this.a=c},
-Qg:function Qg(a,b,c,d,e){var _=this
+Qg:function Qg(a,b,c,d){var _=this
 _.e=300
 _.f=a
 _.r=b
 _.w=c
-_.x=d
 _.a=null
-_.b=e
+_.b=d
 _.c=null},
 ahq:function ahq(){},
 ahr:function ahr(){},
@@ -78546,7 +78545,7 @@ $S:192}
 A.Jb.prototype={
 L(a){return new A.rF($.azW(),"ticketonline",A.AC(null,A.aBH(B.R,B.GJ),!0),null)}}
 A.mk.prototype={
-ad(){return new A.Qg(new A.b3(null,t.z2),B.Cs,new A.b3(null,t.Uq),this.d,B.i)}}
+ad(){return new A.Qg(new A.b3(null,t.z2),B.Cs,new A.b3(null,t.Uq),B.i)}}
 A.Qg.prototype={
 b7(){this.cT()
 this.te()},
@@ -78557,22 +78556,21 @@ te(){var s=0,r=A.L(t.z),q,p=this,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0
 var $async$te=A.M(function(a1,a2){if(a1===1)return A.I(a2,r)
 while(true)switch(s){case 0:a0=A.acS()
 B.c.by(a0.gcm(a0),1)
-o=p.x
 s=3
-return A.E(A.YB(o==null?"":o),$async$te)
-case 3:n=a2
-if(n==null){A.av2("ud\xe1lost nenalezena",B.Ph)
+return A.E(A.YB("skautskyples"),$async$te)
+case 3:o=a2
+if(o==null){A.av2("ud\xe1lost nenalezena",B.Ph)
 s=1
-break}o=n.a
-o.toString
+break}n=o.a
+n.toString
 s=4
-return A.E(A.Yy(o),$async$te)
+return A.E(A.Yy(n),$async$te)
 case 4:m=a2
-o=J.bC(m)
-l=o.lr(m,new A.ahq())
-k=o.lr(m,new A.ahr())
-o=t.LD
-j=A.b([],o)
+n=J.bC(m)
+l=n.lr(m,new A.ahq())
+k=n.lr(m,new A.ahr())
+n=t.LD
+j=A.b([],n)
 for(i=l.e,h=i.length,g=t.Mh,f=0;f<i.length;i.length===h||(0,A.N)(i),++f)j.push(new A.lX(i[f],null,g))
 i=B.b.gM(i)
 h=l.d
@@ -78581,23 +78579,23 @@ e=l.c
 e.toString
 d=t.N8
 c=A.asI(A.aob(null,null,null,null,null,null,null,null,!0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,e,null,null,null,null,null,null,null,null,null,null,null,null,null),i,h,null,j,d)
-b=A.b([],o)
-for(o=k.e,i=o.length,f=0;f<o.length;o.length===i||(0,A.N)(o),++f)b.push(new A.lX(o[f],null,g))
-o=B.b.gM(o)
+b=A.b([],n)
+for(n=k.e,i=n.length,f=0;f<n.length;n.length===i||(0,A.N)(n),++f)b.push(new A.lX(n[f],null,g))
+n=B.b.gM(n)
 i=k.d
 i.toString
 h=k.c
 h.toString
-a=A.asI(A.aob(null,null,null,null,null,null,null,null,!0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,h,null,null,null,null,null,null,null,null,null,null,null,null,null),o,i,new A.aho(p),b,d)
+a=A.asI(A.aob(null,null,null,null,null,null,null,null,!0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,h,null,null,null,null,null,null,null,null,null,null,null,null,null),n,i,new A.aho(p),b,d)
 d=t.N
 i=t.MS
-o=A.a0V(B.CG,null,"name",A.a0X(A.b([A.a1_(d)],i),d))
+n=A.a0V(B.CG,null,"name",A.a0X(A.b([A.a1_(d)],i),d))
 h=A.a0V(B.CJ,null,"surname",A.a0X(A.b([A.a1_(d)],i),d))
 g=A.a0V(B.CI,p.w,"email",A.a0X(A.b([A.a1_(d),A.aDa("Zadejte platn\xfd e-mail")],i),d))
 d=A.a0V(B.CH,null,"place",A.a0X(A.b([A.a1_(d)],i),d))
 i=p.c
 i.toString
-p.r=new A.r9(A.lJ(A.b([o,B.cT,h,B.cT,g,B.cT,d,B.cT,a,B.cT,c,B.cT,new A.y8(new A.ahs(p,n,m),A.a9(i).ax.f,B.Pd,null)],t.D),B.bd,B.cf,B.bU),p.f)
+p.r=new A.r9(A.lJ(A.b([n,B.cT,h,B.cT,g,B.cT,d,B.cT,a,B.cT,c,B.cT,new A.y8(new A.ahs(p,o,m),A.a9(i).ax.f,B.Pd,null)],t.D),B.bd,B.cf,B.bU),p.f)
 p.ag(new A.aht())
 case 1:return A.J(q,r)}})
 return A.K($async$te,r)}}
