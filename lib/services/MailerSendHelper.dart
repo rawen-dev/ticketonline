@@ -7,6 +7,7 @@ import 'ToastHelper.dart';
 class MailerSendHelper{
   static Future<void> sendTicketPurchased(CustomerModel customer, TicketModel ticket) async {
     List<Map<String, String>> allVars = [
+      {"var":"varSymbol", "value": ticket.id.toString()},
       {"var":"name", "value": customer.name!},
       {"var":"surname", "value": customer.surname!},
       {"var":"sex", "value": customer.sex??"male"},
@@ -23,7 +24,7 @@ class MailerSendHelper{
       allVars.add({"var":e.optionGroup!.code!, "value": e.name!});
     }
 
-    await DataService.emailMailerSend(customer.email!, "o65qngk0emw4wr12", allVars);
+    await DataService.emailMailerSend(customer.email!, "pxkjn415990lz781", allVars);
     ToastHelper.Show("Email byl odeslán uživateli: ${customer.email!}");
     await Future.delayed(const Duration(milliseconds: 6000));
   }

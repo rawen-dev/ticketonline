@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ticketonline/models/CustomerModel.dart';
 import 'package:ticketonline/models/OptionModel.dart';
@@ -9,6 +10,19 @@ import 'package:ticketonline/services/DataService.dart';
 import 'package:ticketonline/services/TicketHelper.dart';
 import 'package:ticketonline/services/ToastHelper.dart';
 
+final _router = GoRouter(
+  debugLogDiagnostics: true,
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => MyHomePage(title: "vstupenka.online"),
+    ),
+    GoRoute(
+      path: '/event',
+      builder: (context, state) => MyHomePage(title: "vstupenka.online", occasionLink: "skautskyples",),
+    ),
+  ],
+);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,8 +40,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'ticketonline',
+      routerConfig: _router,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -47,13 +62,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'ticketonline'),
+      //home: const MyHomePage(title: 'ticketonline'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, this.occasionLink});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -65,9 +80,10 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final String? occasionLink;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState(occasionLink);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -77,6 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final _formKey = GlobalKey<FormBuilderState>();
   FormBuilder? formBuilder = const FormBuilder(child: Spacer());
   final _emailFieldKey = GlobalKey<FormBuilderFieldState>();
+  final String? occasionLink;
+
+  _MyHomePageState(this.occasionLink);
 
   @override
   void didChangeDependencies() {
@@ -122,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void loadData() async {
     var bs = Uri.base;
     var path = bs.path.substring(1);
-    var occasion = await DataService.getOccasionModelByLink(path);
+    var occasion = await DataService.getOccasionModelByLink(occasionLink??"");
     if(occasion==null)
     {
       ToastHelper.Show("událost nenalezena", severity: ToastSeverity.NotOk);
