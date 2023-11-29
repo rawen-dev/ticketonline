@@ -7,6 +7,7 @@ import 'package:ticketonline/models/OptionModel.dart';
 import 'package:ticketonline/models/TicketModel.dart';
 import 'package:ticketonline/services/DataService.dart';
 import 'package:ticketonline/services/TicketHelper.dart';
+import 'package:ticketonline/services/ToastHelper.dart';
 
 
 Future<void> main() async {
@@ -119,9 +120,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void loadData() async {
-
-    var occasionId = 1;
-    var groups = await DataService.getAllOptionGroups();
+    var bs = Uri.base;
+    var path = bs.path.substring(1);
+    var occasion = await DataService.getOccasionModelByLink(path);
+    if(occasion==null)
+    {
+      ToastHelper.Show("událost nenalezena", severity: ToastSeverity.NotOk);
+      return;
+    }
+    var groups = await DataService.getAllOptionGroups(occasion.id!);
     var taxis = groups.firstWhere((element) => element.id == 1);
     var foods = groups.firstWhere((element) => element.id == 2);
 
@@ -209,7 +216,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                     var customer = CustomerModel(email: email, name: name, surname: surname);
 
-                    var ticket = TicketModel(occasion: occasionId, price: price, options: [
+                    var ticket = TicketModel(occasion: occasion.id, price: price, options: [
                       _formKey.currentState?.fields[groups[0].code]!.value,
                       _formKey.currentState?.fields[groups[1].code]!.value
                     ]);

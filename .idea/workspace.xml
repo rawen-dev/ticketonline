@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9111883f-8a0e-44e8-ace0-9d90b0aa39c1" name="Changes" comment="" />
+    <list default="true" id="9111883f-8a0e-44e8-ace0-9d90b0aa39c1" name="Changes" comment="update &amp; studio files">
+      <change afterPath="$PROJECT_DIR$/lib/models/Occasion.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/models/OptionGroup.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/models/OptionGroup.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/DataService.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/DataService.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/MailerSendHelper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/MailerSendHelper.dart" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,10 +20,16 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "dart.analysis.tool.window.visible": "false"
+    "dart.analysis.tool.window.visible": "false",
+    "io.flutter.reload.alreadyRun": "true"
   }
 }]]></component>
   <component name="RunManager">
@@ -26,6 +39,14 @@
     </configuration>
   </component>
   <component name="TaskManager">
+    <task id="LOCAL-00001" summary="update &amp; studio files">
+      <created>1701272646625</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1701272646625</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -38,5 +59,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="update &amp; studio files" />
+    <option name="LAST_COMMIT_MESSAGE" value="update &amp; studio files" />
   </component>
 </project>

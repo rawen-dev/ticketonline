@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ticketonline/models/CustomerModel.dart';
+import 'package:ticketonline/models/Occasion.dart';
 import 'package:ticketonline/models/OptionGroup.dart';
 import 'package:ticketonline/models/OptionModel.dart';
 import 'package:ticketonline/models/TicketModel.dart';
@@ -41,7 +42,7 @@ class DataService{
     return ticket;
   }
 
-  static Future<List<OptionGroupModel>> getAllOptionGroups()
+  static Future<List<OptionGroupModel>> getAllOptionGroups(int occasionId)
   async {
     var data = await _supabase
         .from(OptionGroupModel.optionGroupTable)
@@ -54,7 +55,8 @@ class DataService{
         "${OptionModel.idColumn},"
         "${OptionModel.nameColumn},"
         "${OptionModel.priceColumn}"
-        ")");
+        ")")
+        .eq(OptionGroupModel.occasionColumn, occasionId);
     var d = List<OptionGroupModel>.from(
         data.map((x) => OptionGroupModel.fromJson(x)));
     return d;
@@ -70,6 +72,20 @@ class DataService{
     if(data!=null)
     {
       return CustomerModel.fromJson(data);
+    }
+    return null;
+  }
+
+  static Future<OccasionModel?> getOccasionModelByLink(String link)
+  async {
+    var data = await _supabase
+        .from(OccasionModel.occasionTable)
+        .select()
+        .eq(OccasionModel.linkColumn, link)
+        .maybeSingle();
+    if(data!=null)
+    {
+      return OccasionModel.fromJson(data);
     }
     return null;
   }
