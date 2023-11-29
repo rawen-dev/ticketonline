@@ -11,8 +11,10 @@ import 'package:ticketonline/services/TicketHelper.dart';
 import 'package:ticketonline/services/ToastHelper.dart';
 
 final _router = GoRouter(
+  overridePlatformDefaultLocation: true,
+  initialLocation: '/',
   debugLogDiagnostics: true,
-  routes: [
+  routes: <GoRoute>[
     GoRoute(
       path: '/',
       builder: (context, state) => MyHomePage(title: "vstupenka.online"),
@@ -141,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void loadData() async {
     var bs = Uri.base;
     var path = bs.path.substring(1);
-    var occasion = await DataService.getOccasionModelByLink("skautskyples"??"");
+    var occasion = await DataService.getOccasionModelByLink(occasionLink??"");
     if(occasion==null)
     {
       ToastHelper.Show("událost nenalezena", severity: ToastSeverity.NotOk);
