@@ -78560,7 +78560,7 @@ while(true)switch(s){case 0:a0=A.acS()
 B.c.by(a0.gcm(a0),1)
 o=p.x
 s=3
-return A.E(A.YC(o==null?"":o),$async$te)
+return A.E(A.YC(o==null?"skautskyples":o),$async$te)
 case 3:n=a2
 if(n==null){A.av2("ud\xe1lost nenalezena",B.Ph)
 s=1
