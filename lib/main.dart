@@ -26,15 +26,14 @@ void main() async {
 
 final _router = GoRouter(
   initialLocation: '/',
-  debugLogDiagnostics: true,
   routes: <GoRoute>[
     GoRoute(
       path: '/',
-      builder: (context, state) => MyHomePage(title: "vstupenka.online"),
+      builder: (context, state) => MyHomePage(),
     ),
     GoRoute(
       path: '/:occasionLink',
-      builder: (context, state) => MyHomePage(title: "vstupenka.online", occasionLink: state.pathParameters["occasionLink"],),
+      builder: (context, state) => MyHomePage(occasionLink: state.pathParameters["occasionLink"],),
     ),
   ],
 );
@@ -75,7 +74,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, this.occasionLink});
+  const MyHomePage({super.key, this.occasionLink});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -86,7 +85,6 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
   final String? occasionLink;
 
   @override
@@ -95,6 +93,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  String title = "";
   int initialPrice = 0;
   int price = 0;
   final _formKey = GlobalKey<FormBuilderState>();
@@ -127,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -149,9 +148,11 @@ class _MyHomePageState extends State<MyHomePage> {
     var occasion = await DataService.getOccasionModelByLink(occasionLink??"");
     if(occasion==null)
     {
+      title = "vstupenka.online";
       ToastHelper.Show("událost nenalezena", severity: ToastSeverity.NotOk);
       return;
     }
+    title = occasion.name??"";
     initialPrice = occasion.price??0;
     price = initialPrice;
 
