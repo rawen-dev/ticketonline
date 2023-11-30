@@ -9,9 +9,22 @@ import 'package:ticketonline/models/TicketModel.dart';
 import 'package:ticketonline/services/DataService.dart';
 import 'package:ticketonline/services/TicketHelper.dart';
 import 'package:ticketonline/services/ToastHelper.dart';
+import 'package:url_strategy/url_strategy.dart';
+
+
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Supabase.initialize(
+    url: 'https://zsyryiiwkcpjhtdptdhp.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpzeXJ5aWl3a2Nwamh0ZHB0ZGhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDEwOTQzODYsImV4cCI6MjAxNjY3MDM4Nn0.ZeF5HXnaq8A5amCfEQFrXqJ-X1IwqpTIRHRShv-gezE',
+  );
+  setPathUrlStrategy();
+  runApp(const MyApp());
+}
 
 final _router = GoRouter(
-  overridePlatformDefaultLocation: true,
   initialLocation: '/',
   debugLogDiagnostics: true,
   routes: <GoRoute>[
@@ -20,21 +33,11 @@ final _router = GoRouter(
       builder: (context, state) => MyHomePage(title: "vstupenka.online"),
     ),
     GoRoute(
-      path: '/event',
-      builder: (context, state) => MyHomePage(title: "vstupenka.online", occasionLink: "skautskyples",),
+      path: '/:occasionLink',
+      builder: (context, state) => MyHomePage(title: "vstupenka.online", occasionLink: state.pathParameters["occasionLink"],),
     ),
   ],
 );
-
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Supabase.initialize(
-    url: 'https://zsyryiiwkcpjhtdptdhp.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpzeXJ5aWl3a2Nwamh0ZHB0ZGhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDEwOTQzODYsImV4cCI6MjAxNjY3MDM4Nn0.ZeF5HXnaq8A5amCfEQFrXqJ-X1IwqpTIRHRShv-gezE',
-  );
-  runApp(const MyApp());
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -45,6 +48,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'ticketonline',
       routerConfig: _router,
+      //routeInformationParser: _router.routeInformationParser,
+      //routerDelegate: _router.routerDelegate,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -141,9 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void loadData() async {
-    var bs = Uri.base;
-    var path = bs.path.substring(1);
-    var occasion = await DataService.getOccasionModelByLink(path);
+    var occasion = await DataService.getOccasionModelByLink(occasionLink??"");
     if(occasion==null)
     {
       ToastHelper.Show("událost nenalezena", severity: ToastSeverity.NotOk);
