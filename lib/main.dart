@@ -29,7 +29,7 @@ final _router = GoRouter(
   routes: <GoRoute>[
     GoRoute(
       path: '/',
-      builder: (context, state) => MyHomePage(),
+      builder: (context, state) => const MyHomePage(),
     ),
     GoRoute(
       path: '/:occasionLink',
@@ -68,7 +68,6 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      //home: const MyHomePage(title: 'ticketonline'),
     );
   }
 }
@@ -148,7 +147,9 @@ class _MyHomePageState extends State<MyHomePage> {
     var occasion = await DataService.getOccasionModelByLink(occasionLink??"");
     if(occasion==null)
     {
-      title = "vstupenka.online";
+      setState(() {
+        title = "vstupenka.online";
+      });
       ToastHelper.Show("událost nenalezena", severity: ToastSeverity.NotOk);
       return;
     }
