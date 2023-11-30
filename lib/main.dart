@@ -9,7 +9,6 @@ import 'package:ticketonline/models/TicketModel.dart';
 import 'package:ticketonline/services/DataService.dart';
 import 'package:ticketonline/services/TicketHelper.dart';
 import 'package:ticketonline/services/ToastHelper.dart';
-import 'package:url_strategy/url_strategy.dart';
 
 
 
@@ -20,7 +19,6 @@ void main() async {
     url: 'https://zsyryiiwkcpjhtdptdhp.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpzeXJ5aWl3a2Nwamh0ZHB0ZGhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDEwOTQzODYsImV4cCI6MjAxNjY3MDM4Nn0.ZeF5HXnaq8A5amCfEQFrXqJ-X1IwqpTIRHRShv-gezE',
   );
-  setPathUrlStrategy();
   runApp(const MyApp());
 }
 
