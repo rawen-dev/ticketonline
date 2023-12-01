@@ -45,7 +45,7 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
   List<SeatModel> changedBoxes = [];
   List<SeatModel> allBoxes = [];
 
-  static const int boxSize = 20;
+  static const int boxSize = 14;
   selectionMode currentSelectionMode = selectionMode.normal;
 
   @override
@@ -61,74 +61,9 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                 const SizedBox(
                   height: 16,
                 ),
-                Text(room?.name??""),
+                Text(room?.name??"", style: TextStyle(fontWeight: FontWeight.bold),),
                 const SizedBox(
                   height: 16,
-                ),
-                Visibility(
-                  visible: currentBoxes!=null,
-                  child: Flexible(
-                    child: SizedBox(
-                      width: currentWidth*boxSize.toDouble(),
-                      height: currentHeight*boxSize.toDouble(),
-                      child: SeatLayoutWidget(
-                        onSeatTap: (model){
-                          if(currentSelectionMode==selectionMode.addBlack)
-                          {
-                            model.seatState = SeatState.black;
-                            changedBoxes.add(model);
-                          }
-                          else if (currentSelectionMode==selectionMode.addAvailable)
-                          {
-                            model.seatState = SeatState.available;
-                            model.boxModel = model.boxModel ?? BoxModel(x: model.colI, y: model.rowI, occasion: occasion!.id, room: room!.id);
-                            model.boxModel!.boxGroupId = currentBoxGroup!.id;
-                            model.boxModel!.name = currentBoxGroup!.getNextBoxName();
-                            currentBoxGroup!.boxes!.add(model.boxModel!);
-
-                            changedBoxes.add(model);
-                            ToastHelper.Show("Přidáno sedadlo ${model.boxModel!.name}.");
-                          }
-                          else if (currentSelectionMode==selectionMode.normal)
-                          {
-                            if(model.seatState==SeatState.selected)
-                            {
-                              model.seatState = SeatState.available;
-                              changedBoxes.remove(model);
-                              return;
-                            }
-                            else if(model.seatState!=SeatState.available)
-                            {
-                              return;
-                            }
-
-                            //available
-                            var alreadySelected = allBoxes.where((b) => b.seatState == SeatState.selected);
-                            if(alreadySelected.isNotEmpty)
-                            {
-                              ToastHelper.Show("Je možné vybrat pouze jedno místo!");
-                              return;
-                            }
-                            model.seatState = SeatState.selected;
-                            changedBoxes.add(model);
-                          }
-                        },
-
-                        stateModel: SeatLayoutStateModel(
-                          pathDisabledSeat: 'assets/svg_disabled_bus_seat.svg',
-                          pathSelectedSeat: 'assets/svg_selected_bus_seats.svg',
-                          pathSoldSeat: 'assets/svg_sold_bus_seat.svg',
-                          pathUnSelectedSeat: 'assets/svg_unselected_bus_seat.svg',
-                          pathEmptySpace: 'assets/svg_empty_space.svg',
-                          rows: currentWidth,
-                          cols: currentHeight,
-                          seatSvgSize: boxSize,
-                          currentBoxes: currentBoxes??[],
-                          allBoxes: allBoxes
-                        ),
-                      ),
-                    ),
-                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -205,6 +140,74 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                 const SizedBox(
                   height: 12,
                 ),
+                Visibility(
+                  visible: currentBoxes!=null,
+                  child: Flexible(
+                    child: SizedBox(
+                      width: currentWidth*boxSize.toDouble(),
+                      height: currentHeight*boxSize.toDouble(),
+                      child: SeatLayoutWidget(
+                        onSeatTap: (model){
+                          if(currentSelectionMode==selectionMode.addBlack)
+                          {
+                            model.seatState = SeatState.black;
+                            changedBoxes.add(model);
+                          }
+                          else if (currentSelectionMode==selectionMode.addAvailable)
+                          {
+                            model.seatState = SeatState.available;
+                            model.boxModel = model.boxModel ?? BoxModel(x: model.colI, y: model.rowI, occasion: occasion!.id, room: room!.id);
+                            model.boxModel!.boxGroupId = currentBoxGroup!.id;
+                            model.boxModel!.name = currentBoxGroup!.getNextBoxName();
+                            currentBoxGroup!.boxes!.add(model.boxModel!);
+
+                            changedBoxes.add(model);
+                            ToastHelper.Show("Přidáno sedadlo ${model.boxModel!.name}.");
+                          }
+                          else if (currentSelectionMode==selectionMode.normal)
+                          {
+                            if(model.seatState==SeatState.selected)
+                            {
+                              model.seatState = SeatState.available;
+                              changedBoxes.remove(model);
+                              return;
+                            }
+                            else if(model.seatState!=SeatState.available)
+                            {
+                              return;
+                            }
+
+                            //available
+                            var alreadySelected = allBoxes.where((b) => b.seatState == SeatState.selected);
+                            if(alreadySelected.isNotEmpty)
+                            {
+                              ToastHelper.Show("Je možné vybrat pouze jedno místo!");
+                              return;
+                            }
+                            model.seatState = SeatState.selected;
+                            changedBoxes.add(model);
+                          }
+                        },
+
+                        stateModel: SeatLayoutStateModel(
+                          pathDisabledSeat: 'assets/svg_disabled_bus_seat.svg',
+                          pathSelectedSeat: 'assets/svg_selected_bus_seats.svg',
+                          pathSoldSeat: 'assets/svg_sold_bus_seat.svg',
+                          pathUnSelectedSeat: 'assets/svg_unselected_bus_seat.svg',
+                          pathEmptySpace: 'assets/svg_empty_space.svg',
+                          rows: currentHeight,
+                          cols: currentWidth,
+                          seatSvgSize: boxSize,
+                          currentBoxes: currentBoxes??[],
+                          allBoxes: allBoxes
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -256,7 +259,6 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                   ]
                 ),
                 const SizedBox(height: 12),
-                //Text(selectedSeats.join(" , "))
               ],
             ),
           ),
