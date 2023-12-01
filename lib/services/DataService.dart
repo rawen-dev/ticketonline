@@ -9,6 +9,7 @@ import 'package:ticketonline/models/RoomModel.dart';
 import 'package:ticketonline/models/TicketModel.dart';
 
 class DataService{
+  static bool isEditor = false;
   static final _supabase = Supabase.instance.client;
   static Future<void> emailMailerSend(String recipient, String templateId, List<Map<String, String>> variables)
   async {

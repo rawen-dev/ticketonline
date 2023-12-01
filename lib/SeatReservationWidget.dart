@@ -208,21 +208,24 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        Set<BoxGroupModel> tables = {};
-                        tables.addAll(currentBoxes!.where((element) => element.boxGroup!=null).map((e) => e.boxGroup!));
-                        var newTableName = ((tables.length + 1)).toString();
-                        var result = await DialogHelper.showConfirmationDialogAsync(context, "Přidat stůl", "Chcete přidat stůl ${newTableName}?");
-                        if(!result)
-                        {
-                          return;
-                        }
-                        var newBox = BoxGroupModel(name: newTableName, occasion: occasion!.id!, room: room!.id!);
-                        currentBoxGroup = await DataService.updateBoxGroup(newBox);
-                        ToastHelper.Show("Vytvořen stůl ${newTableName}.");
-                      },
-                      child: const Text("přidat stůl"),
+                    Visibility(
+                      visible: DataService.isEditor,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          Set<BoxGroupModel> tables = {};
+                          tables.addAll(currentBoxes!.where((element) => element.boxGroup!=null).map((e) => e.boxGroup!));
+                          var newTableName = ((tables.length + 1)).toString();
+                          var result = await DialogHelper.showConfirmationDialogAsync(context, "Přidat stůl", "Chcete přidat stůl ${newTableName}?");
+                          if(!result)
+                          {
+                            return;
+                          }
+                          var newBox = BoxGroupModel(name: newTableName, occasion: occasion!.id!, room: room!.id!);
+                          currentBoxGroup = await DataService.updateBoxGroup(newBox);
+                          ToastHelper.Show("Vytvořen stůl ${newTableName}.");
+                        },
+                        child: const Text("přidat stůl"),
+                      ),
                     ),
                     const SizedBox(width: 12),
                     ElevatedButton(
