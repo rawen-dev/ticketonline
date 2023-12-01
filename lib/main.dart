@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
@@ -191,6 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: [
             FormBuilderTextField(
+              autofillHints: const [AutofillHints.name],
               name: CustomerModel.nameColumn,
               decoration: const InputDecoration(labelText: 'Jméno'),
               validator: FormBuilderValidators.compose([
@@ -199,6 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 10),
             FormBuilderTextField(
+              autofillHints: const [AutofillHints.givenName],
               name: CustomerModel.surnameColumn,
               decoration: const InputDecoration(labelText: 'Příjmení'),
               validator: FormBuilderValidators.compose([
@@ -207,6 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 10),
             FormBuilderTextField(
+              autofillHints: const [AutofillHints.email],
               key: _emailFieldKey,
               name: CustomerModel.emailColumn,
               decoration: const InputDecoration(labelText: 'E-mail'),
@@ -249,6 +253,7 @@ class _MyHomePageState extends State<MyHomePage> {
             MaterialButton(
               color: Theme.of(context).colorScheme.secondary,
               onPressed: () async {
+                TextInput.finishAutofillContext();
                 if (_formKey.currentState?.saveAndValidate() ?? false) {
                   if (true) {
                     // // Either invalidate using Form Key
