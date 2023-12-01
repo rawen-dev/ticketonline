@@ -146,6 +146,17 @@ class DataService{
         .upsert(jsonList);
   }
 
+  static Future<BoxGroupModel> updateBoxGroup(BoxGroupModel boxGroupModel)
+  async {
+    var json = boxGroupModel.toJson();
+    var updated = await _supabase
+        .from(BoxGroupModel.boxGroupsTable)
+        .upsert(json)
+        .select()
+        .single();
+    return BoxGroupModel.fromJson(updated);
+  }
+
   static Future<void> loadAllBoxesAndGroups(RoomModel room)
   async {
     var data = await _supabase

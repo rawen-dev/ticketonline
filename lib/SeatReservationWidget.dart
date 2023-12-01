@@ -5,11 +5,13 @@ import 'package:ticketonline/SseatReservationComponent/model/seat_layout_state_m
 import 'package:ticketonline/SseatReservationComponent/model/seat_model.dart';
 import 'package:ticketonline/SseatReservationComponent/utils/seat_state.dart';
 import 'package:ticketonline/SseatReservationComponent/widgets/seat_layout_widget.dart';
+import 'package:ticketonline/models/BoxGroupModel.dart';
 import 'package:ticketonline/models/BoxModel.dart';
 import 'package:ticketonline/models/OccasionModel.dart';
 import 'package:ticketonline/models/RoomModel.dart';
 
 import 'package:ticketonline/services/DataService.dart';
+import 'package:ticketonline/services/DialogHelper.dart';
 import 'package:ticketonline/services/ToastHelper.dart';
 
 
@@ -35,6 +37,8 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
   }
 
   List<BoxModel>? currentBoxes;
+  BoxGroupModel? currentBoxGroup;
+
   int currentWidth = 20;
   int currentHeight = 20;
 
@@ -77,6 +81,11 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                           else if (currentSelectionMode==selectionMode.addAvailable)
                           {
                             model.seatState = SeatState.available;
+                            model.boxModel = model.boxModel ?? BoxModel(x: model.colI, y: model.rowI, occasion: occasion!.id, room: room!.id);
+                            model.boxModel!.boxGroupId = currentBoxGroup!.id;
+                            model.boxModel!.name = currentBoxGroup!.getNextBoxName();
+                            currentBoxGroup!.boxes!.add(model.boxModel!);
+
                             changedBoxes.add(model);
                           }
                           else if (currentSelectionMode==selectionMode.normal)
@@ -149,7 +158,10 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                         children: [
                           GestureDetector(
                             onTap: (){
-                              currentSelectionMode = selectionMode.addBlack;
+                              if(currentBoxGroup!=null)
+                              {
+                                currentSelectionMode = selectionMode.addBlack;
+                              }
                             },
                             child: SvgPicture.asset(
                               'assets/svg_disabled_bus_seat.svg',
@@ -178,7 +190,10 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                         children: [
                           GestureDetector(
                             onTap: (){
-                              currentSelectionMode = selectionMode.addAvailable;
+                              if(currentBoxGroup!=null)
+                              {
+                                currentSelectionMode = selectionMode.addAvailable;
+                              }
                             },
                             child: SvgPicture.asset(
                               'assets/svg_unselected_bus_seat.svg',
@@ -212,11 +227,28 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
+                      onPressed: () async {
+                        Set<BoxGroupModel> tables = {};
+                        tables.addAll(currentBoxes!.where((element) => element.boxGroup!=null).map((e) => e.boxGroup!));
+                        var newTableName = ((tables.length + 1)).toString();
+                        var result = await DialogHelper.showConfirmationDialogAsync(context, "Přidat stůl", "Chcete přidat stůl ${newTableName}?");
+                        if(!result)
+                        {
+                          return;
+                        }
+                        var newBox = BoxGroupModel(name: newTableName, occasion: occasion!.id!, room: room!.id!);
+                        currentBoxGroup = await DataService.updateBoxGroup(newBox);
+                        ToastHelper.Show("Vytvořen stůl ${newTableName}.");
+                      },
+                      child: const Text("přidat stůl"),
+                    ),
+                    const SizedBox(width: 12),
+                    ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
                     child: const Text("zpět"),
-                  ),
+                    ),
                     const SizedBox(width: 12),
                     ElevatedButton(
                       onPressed: () {
