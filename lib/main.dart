@@ -191,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: [
             FormBuilderTextField(
-              name: 'name',
+              name: CustomerModel.nameColumn,
               decoration: const InputDecoration(labelText: 'Jméno'),
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(),
@@ -199,7 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 10),
             FormBuilderTextField(
-              name: 'surname',
+              name: CustomerModel.surnameColumn,
               decoration: const InputDecoration(labelText: 'Příjmení'),
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(),
@@ -208,7 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 10),
             FormBuilderTextField(
               key: _emailFieldKey,
-              name: 'email',
+              name: CustomerModel.emailColumn,
               decoration: const InputDecoration(labelText: 'E-mail'),
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(),
@@ -217,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 10),
             FormBuilderTextField(
-              name: 'place',
+              name: TicketModel.boxColumn,
               enableInteractiveSelection: false,
               readOnly: true,
               decoration: const InputDecoration(labelText: 'Místo k sezení', suffixIcon: Icon(Icons.event_seat)),
@@ -236,7 +236,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     return SeatReservationWidget(occasion: occasion, selectedSeats: selectedSeats);
                   },
                 );
-                _formKey.currentState?.fields['place']!.didChange(selectedSeats.firstOrNull?.toString());
+                _formKey.currentState?.fields[TicketModel.boxColumn]!.didChange(selectedSeats.firstOrNull?.toString());
               },
             ),
             const SizedBox(height: 10),
@@ -244,7 +244,7 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 10),
             taxiGroup,
             const SizedBox(height: 10),
-            FormBuilderTextField(name: "note", decoration: const InputDecoration(labelText: "Poznámka")),
+            FormBuilderTextField(name: TicketModel.noteColumn, decoration: const InputDecoration(labelText: "Poznámka")),
             const SizedBox(height: 10),
             MaterialButton(
               color: Theme.of(context).colorScheme.secondary,
@@ -256,10 +256,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     //     ?.invalidate('Email already taken.');
                     // OR invalidate using Field Key
                     // _emailFieldKey.currentState?.invalidate('Email already taken.');
-                    var email = _formKey.currentState?.fields['email']!.value;
-                    var name = _formKey.currentState?.fields['name']!.value;
-                    var surname = _formKey.currentState?.fields['surname']!.value;
-                    var note = _formKey.currentState?.fields['note']!.value;
+                    var email = _formKey.currentState?.fields[CustomerModel.emailColumn]!.value;
+                    var name = _formKey.currentState?.fields[CustomerModel.nameColumn]!.value;
+                    var surname = _formKey.currentState?.fields[CustomerModel.surnameColumn]!.value;
+                    var note = _formKey.currentState?.fields[TicketModel.noteColumn]!.value;
                     var place = selectedSeats.firstOrNull;
 
                     var customer = CustomerModel(email: email, name: name, surname: surname);

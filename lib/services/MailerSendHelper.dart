@@ -12,10 +12,8 @@ class MailerSendHelper{
       {"var":"surname", "value": customer.surname!},
       {"var":"sex", "value": customer.sex??"male"},
       {"var":"email", "value": customer.email!},
-      //{"var":"food", "value": ticket.extras[]},
-      //{"var":"taxi", "value": email},
-      //{"var":"table", "value": ticket.seat!.table!},
-      //{"var":"seat", "value": ticket.seat!.name!},
+      {"var":"table", "value": ticket.box!.boxGroup!.name!},
+      {"var":"seat", "value": ticket.box!.name!},
       {"var":"price", "value": ticket.price.toString()},
     ];
 

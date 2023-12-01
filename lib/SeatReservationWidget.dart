@@ -6,7 +6,7 @@ import 'package:ticketonline/SseatReservationComponent/model/seat_model.dart';
 import 'package:ticketonline/SseatReservationComponent/utils/seat_state.dart';
 import 'package:ticketonline/SseatReservationComponent/widgets/seat_layout_widget.dart';
 import 'package:ticketonline/models/BoxModel.dart';
-import 'package:ticketonline/models/Occasion.dart';
+import 'package:ticketonline/models/OccasionModel.dart';
 import 'package:ticketonline/models/RoomModel.dart';
 
 import 'package:ticketonline/services/DataService.dart';

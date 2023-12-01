@@ -1,4 +1,4 @@
-import 'package:ticketonline/models/OptionGroup.dart';
+import 'package:ticketonline/models/OptionGroupModel.dart';
 
 class OptionModel{
   static const String optionTable = "options";
