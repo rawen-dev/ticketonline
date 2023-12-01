@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -64,7 +65,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(120, 55, 84, 98)),
         useMaterial3: true,
       ),
     );
@@ -132,9 +133,14 @@ class _MyHomePageState extends State<MyHomePage> {
         // in the middle of the parent.
         child: SingleChildScrollView(
           child: Container(
-            constraints: const BoxConstraints(maxWidth: 480),
+            constraints: const BoxConstraints(maxWidth: 440),
             child: Column(
-              children: [ formBuilder!,
+              children: [
+                const Image(image: AssetImage('assets/header.png')),
+                const SizedBox(height: 12),
+                HtmlWidget(occasion?.description??"",),
+                const SizedBox(height: 32),
+                formBuilder!,
                 const SizedBox(height: 12),
                 Text("Celková cena: $price Kč"),
                 const SizedBox(height: 12),
@@ -180,7 +186,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       debugPrint(_formKey.currentState?.value.toString());
                     },
                     child: const Text("Koupit lístek")
-                ) ]
+                ),
+                const SizedBox(height: 12),
+              ]
               ,
             ),
           ),

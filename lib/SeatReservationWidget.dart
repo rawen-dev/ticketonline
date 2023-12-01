@@ -54,7 +54,7 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
       body: SafeArea(
         child: Center(
           child: Container(
-            constraints: const BoxConstraints(maxWidth: 480),
+            constraints: const BoxConstraints(maxWidth: 440),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

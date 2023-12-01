@@ -25,7 +25,6 @@ class MailerSendHelper{
 
     await DataService.emailMailerSend(customer.email!, "pxkjn415990lz781", allVars);
     ToastHelper.Show("Email byl odeslán uživateli: ${customer.email!}");
-    await Future.delayed(const Duration(milliseconds: 6000));
   }
 
 }

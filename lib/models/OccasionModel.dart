@@ -5,12 +5,14 @@ class OccasionModel{
   static const String nameColumn = "name";
   static const String priceColumn = "price";
   static const String linkColumn = "link";
+  static const String descriptionColumn = "description";
 
   int? id;
   int? price;
   DateTime? createdAt;
   String? name;
   String? link;
+  String? description;
 
   OccasionModel({
     this.id,
@@ -18,6 +20,7 @@ class OccasionModel{
     this.createdAt,
     this.name,
     this.link,
+    this.description,
   });
 
   static OccasionModel fromJson(Map<String, dynamic> json) {
@@ -27,6 +30,7 @@ class OccasionModel{
       name: json[nameColumn],
       price: json[priceColumn],
       link: json[linkColumn],
+      description: json[descriptionColumn],
     );
   }
 
@@ -35,6 +39,7 @@ class OccasionModel{
       nameColumn: name,
       priceColumn: price,
       linkColumn: link,
+      descriptionColumn: description,
     };
     if(id != null)
     {
