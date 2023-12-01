@@ -27880,38 +27880,41 @@ s=r+1}r=B.c.dd(a,b)
 for(;r!==-1;){q=r===0?0:B.c.qk(a,"\n",r-1)+1
 if(c===r-q)return q
 r=B.c.ex(a,b,r+1)}return null},
-Mi(a,b){var s=0,r=A.O(t.H),q,p,o,n,m,l,k,j,i,h,g,f
-var $async$Mi=A.P(function(c,d){if(c===1)return A.L(d,r)
-while(true)switch(s){case 0:h=t.N
-g=A.ai(["var","varSymbol","value",J.cH(b.a)],h,h)
-f=a.d
-f.toString
-f=A.ai(["var","name","value",f],h,h)
+Mi(a,b){var s=0,r=A.O(t.H),q,p,o,n,m,l,k,j,i,h,g,f,e,d
+var $async$Mi=A.P(function(c,a0){if(c===1)return A.L(a0,r)
+while(true)switch(s){case 0:f=t.N
+e=A.ai(["var","varSymbol","value",J.cH(b.a)],f,f)
+d=a.d
+d.toString
+d=A.ai(["var","name","value",d],f,f)
 q=a.e
 q.toString
-q=A.ai(["var","surname","value",q],h,h)
+q=A.ai(["var","surname","value",q],f,f)
 p=a.f
-p=A.ai(["var","sex","value",p==null?"male":p],h,h)
+p=A.ai(["var","sex","value",p==null?"male":p],f,f)
 o=a.c
 o.toString
-n=A.ai(["var","email","value",o],h,h)
+n=A.ai(["var","email","value",o],f,f)
 m=b.r
 l=m.f.c
 l.toString
-l=A.ai(["var","table","value",l],h,h)
+l=A.ai(["var","table","value",l],f,f)
 m=m.c
 m.toString
-k=A.a([g,f,q,p,n,l,A.ai(["var","seat","value",m],h,h),A.ai(["var","price","value",J.cH(b.w)],h,h)],t.m0)
-g=b.y
-g.toString
-j=0
-for(;j<2;++j){i=g[j]
-f=i.d.d
-f.toString
-q=i.b
+m=A.ai(["var","seat","value",m],f,f)
+k=A.ai(["var","price","value",J.cH(b.w)],f,f)
+j=b.e
+i=A.a([e,d,q,p,n,l,m,k,A.ai(["var","note","value",j==null?"":j],f,f)],t.m0)
+e=b.y
+e.toString
+h=0
+for(;h<2;++h){g=e[h]
+d=g.d.d
+d.toString
+q=g.b
 q.toString
-k.push(A.ai(["var",f,"value",q],h,h))}s=2
-return A.E(A.a2H(o,"pxkjn415990lz781",k),$async$Mi)
+i.push(A.ai(["var",d,"value",q],f,f))}s=2
+return A.E(A.a2H(o,"pxkjn415990lz781",i),$async$Mi)
 case 2:A.aiE("Email byl odesl\xe1n u\u017eivateli: "+o,B.h9)
 s=3
 return A.E(A.ue(B.Gm,null,t.z),$async$Mi)
