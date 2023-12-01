@@ -4,6 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:ticketonline/ResultWidget.dart';
 import 'package:ticketonline/SeatReservationWidget.dart';
 import 'package:ticketonline/models/BoxModel.dart';
 import 'package:ticketonline/models/CustomerModel.dart';
@@ -164,6 +165,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                 _formKey.currentState?.fields["taxi"]!.value
                               ]);
                           await TicketHelper.sendTicketOrder(customer, ticket);
+                          await showGeneralDialog(
+                            context: context,
+                            barrierColor: Colors.black12.withOpacity(0.6), // Background color
+                            barrierDismissible: false,
+                            barrierLabel: 'Dialog',
+                            transitionDuration: const Duration(milliseconds: 300),
+                            pageBuilder: (context, __, ___) {
+                              return ResultWidget(ticketModel: ticket,);
+                            },
+                          );
                         }
                       }
                       debugPrint(_formKey.currentState?.value.toString());
