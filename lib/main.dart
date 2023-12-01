@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ticketonline/SeatReservationWidget.dart';
 import 'package:ticketonline/models/BoxModel.dart';
 import 'package:ticketonline/models/CustomerModel.dart';
+import 'package:ticketonline/models/OccasionModel.dart';
 import 'package:ticketonline/models/OptionModel.dart';
 import 'package:ticketonline/models/TicketModel.dart';
 import 'package:ticketonline/services/DataService.dart';
@@ -97,6 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final String? occasionLink;
   final Set<BoxModel> selectedSeats = {};
 
+  OccasionModel? occasion;
+
   _MyHomePageState(this.occasionLink);
 
   @override
@@ -130,7 +133,43 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Container(
             constraints: const BoxConstraints(maxWidth: 480),
             child: Column(
-              children: [ formBuilder!, Text("Celková cena: $price") ]
+              children: [ formBuilder!,
+                const SizedBox(height: 12),
+                Text("Celková cena: $price Kč"),
+                const SizedBox(height: 12),
+                ElevatedButton(
+                    onPressed: () async {
+                      TextInput.finishAutofillContext();
+                      if (_formKey.currentState?.saveAndValidate() ?? false) {
+                        if (true) {
+                          // // Either invalidate using Form Key
+                          // _formKey.currentState?.fields['email']
+                          //     ?.invalidate('Email already taken.');
+                          // OR invalidate using Field Key
+                          // _emailFieldKey.currentState?.invalidate('Email already taken.');
+                          var email = _formKey.currentState?.fields[CustomerModel.emailColumn]!.value;
+                          var name = _formKey.currentState?.fields[CustomerModel.nameColumn]!.value;
+                          var surname = _formKey.currentState?.fields[CustomerModel.surnameColumn]!.value;
+                          var note = _formKey.currentState?.fields[TicketModel.noteColumn]!.value;
+                          var place = selectedSeats.firstOrNull;
+
+                          var customer = CustomerModel(email: email, name: name, surname: surname);
+
+                          var ticket = TicketModel(occasion: occasion!.id,
+                              price: price,
+                              note: note,
+                              box: place,
+                              options: [
+                                _formKey.currentState?.fields["food"]!.value,
+                                _formKey.currentState?.fields["taxi"]!.value
+                              ]);
+                          await TicketHelper.sendTicketOrder(customer, ticket);
+                        }
+                      }
+                      debugPrint(_formKey.currentState?.value.toString());
+                    },
+                    child: const Text("Koupit lístek")
+                ) ]
               ,
             ),
           ),
@@ -140,7 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void loadData() async {
-    var occasion = await DataService.getOccasionModelByLink(occasionLink??"");
+    occasion = await DataService.getOccasionModelByLink(occasionLink??"");
     if(occasion == null)
     {
       occasion = (await DataService.getAllOccasions()).firstOrNull;
@@ -153,11 +192,11 @@ class _MyHomePageState extends State<MyHomePage> {
         return;
       }
     }
-    title = occasion.name??"";
-    initialPrice = occasion.price??0;
+    title = occasion!.name??"";
+    initialPrice = occasion!.price??0;
     price = initialPrice;
 
-    var groups = await DataService.getAllOptionGroups(occasion.id!);
+    var groups = await DataService.getAllOptionGroups(occasion!.id!);
     var taxis = groups.firstWhere((element) => element.id == 1);
     var foods = groups.firstWhere((element) => element.id == 2);
 
@@ -254,42 +293,6 @@ class _MyHomePageState extends State<MyHomePage> {
             taxiGroup,
             const SizedBox(height: 10),
             FormBuilderTextField(name: TicketModel.noteColumn, decoration: const InputDecoration(labelText: "Poznámka")),
-            const SizedBox(height: 10),
-            MaterialButton(
-              color: Theme.of(context).colorScheme.secondary,
-              onPressed: () async {
-                TextInput.finishAutofillContext();
-                if (_formKey.currentState?.saveAndValidate() ?? false) {
-                  if (true) {
-                    // // Either invalidate using Form Key
-                    // _formKey.currentState?.fields['email']
-                    //     ?.invalidate('Email already taken.');
-                    // OR invalidate using Field Key
-                    // _emailFieldKey.currentState?.invalidate('Email already taken.');
-                    var email = _formKey.currentState?.fields[CustomerModel.emailColumn]!.value;
-                    var name = _formKey.currentState?.fields[CustomerModel.nameColumn]!.value;
-                    var surname = _formKey.currentState?.fields[CustomerModel.surnameColumn]!.value;
-                    var note = _formKey.currentState?.fields[TicketModel.noteColumn]!.value;
-                    var place = selectedSeats.firstOrNull;
-
-                    var customer = CustomerModel(email: email, name: name, surname: surname);
-
-                    var ticket = TicketModel(occasion: occasion!.id,
-                        price: price,
-                        note: note,
-                        box: place,
-                        options: [
-                      _formKey.currentState?.fields[groups[0].code]!.value,
-                      _formKey.currentState?.fields[groups[1].code]!.value
-                    ]);
-                    await TicketHelper.sendTicketOrder(customer, ticket);
-                  }
-                }
-                debugPrint(_formKey.currentState?.value.toString());
-              },
-              child:
-              const Text("Koupit lístek", style: TextStyle(color: Colors.white)),
-            )
           ],
         ));
     setState(() {});
