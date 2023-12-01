@@ -95,6 +95,15 @@ class DataService{
     return null;
   }
 
+  static Future<List<OccasionModel>> getAllOccasions()
+  async {
+    var data = await _supabase
+        .from(OccasionModel.occasionTable)
+        .select();
+    return List<OccasionModel>.from(
+        data.map((x) => OccasionModel.fromJson(x)));
+  }
+
   static Future<List<RoomModel>> getRooms(int occasionId)
   async {
     var data = await _supabase

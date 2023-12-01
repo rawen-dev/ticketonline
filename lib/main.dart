@@ -142,11 +142,15 @@ class _MyHomePageState extends State<MyHomePage> {
     var occasion = await DataService.getOccasionModelByLink(occasionLink??"");
     if(occasion == null)
     {
-      setState(() {
-        title = "vstupenka.online";
-      });
-      ToastHelper.Show("událost nenalezena", severity: ToastSeverity.NotOk);
-      return;
+      occasion = (await DataService.getAllOccasions()).firstOrNull;
+      if(occasion==null)
+      {
+        setState(() {
+          title = "vstupenka.online";
+        });
+        ToastHelper.Show("událost nenalezena", severity: ToastSeverity.NotOk);
+        return;
+      }
     }
     title = occasion.name??"";
     initialPrice = occasion.price??0;
@@ -260,7 +264,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                     var customer = CustomerModel(email: email, name: name, surname: surname);
 
-                    var ticket = TicketModel(occasion: occasion.id,
+                    var ticket = TicketModel(occasion: occasion!.id,
                         price: price,
                         note: note,
                         box: place,
