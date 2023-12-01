@@ -1,8 +1,11 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:ticketonline/models/BoxGroupModel.dart';
+import 'package:ticketonline/models/BoxModel.dart';
 import 'package:ticketonline/models/CustomerModel.dart';
 import 'package:ticketonline/models/Occasion.dart';
 import 'package:ticketonline/models/OptionGroup.dart';
 import 'package:ticketonline/models/OptionModel.dart';
+import 'package:ticketonline/models/RoomModel.dart';
 import 'package:ticketonline/models/TicketModel.dart';
 
 class DataService{
@@ -28,10 +31,12 @@ class DataService{
     var data = await _supabase.from(TicketModel.ticketTable).upsert(ticket.toJson()).select().single();
     var updatedTicket = TicketModel.fromJson(data);
     ticket.id = updatedTicket.id;
-    if(ticket.seat != null)
+    if(ticket.box != null)
     {
-      await _supabase.from(TicketModel.ticketSeatTable).upsert({"ticket":ticket.id, "seat":ticket.seat!.id});
+      ticket.box!.type = BoxModel.soldType;
+      await updateBoxes([ticket.box!]);
     }
+
     if(ticket.options != null)
     {
       for(var e in ticket.options!)
@@ -88,5 +93,58 @@ class DataService{
       return OccasionModel.fromJson(data);
     }
     return null;
+  }
+
+  static Future<List<RoomModel>> getRooms(int occasionId)
+  async {
+    var data = await _supabase
+        .from(RoomModel.roomTable)
+        .select()
+        .eq(RoomModel.occasionColumn, occasionId);
+
+    return List<RoomModel>.from(
+        data.map((x) => RoomModel.fromJson(x)));
+  }
+
+  static Future<List<BoxModel>> getAllBoxes(int occasionId)
+  async {
+    var data = await _supabase
+        .from(BoxModel.boxTable)
+        .select(
+        "${BoxModel.idColumn},"
+        "${BoxModel.typeColumn},"
+        "${BoxModel.occasionColumn},"
+        "${BoxModel.roomColumn},"
+        "${BoxModel.nameColumn},"
+        "${BoxModel.yColumn},"
+        "${BoxModel.xColumn},"
+        "${BoxGroupModel.boxGroupsTable}("
+            "${BoxGroupModel.idColumn},"
+            "${BoxGroupModel.nameColumn},"
+            "${BoxGroupModel.roomColumn},"
+            "${BoxGroupModel.occasionColumn})")
+        .eq(BoxModel.occasionColumn, occasionId);
+
+    return List<BoxModel>.from(
+        data.map((x) => BoxModel.fromJson(x)));
+  }
+
+  static Future<void> updateBoxes(List<BoxModel> boxes)
+  async {
+    var jsonList = boxes.map((b) => b.toJson()).toList();
+    await _supabase
+        .from(BoxModel.boxTable)
+        .upsert(jsonList);
+  }
+
+  static Future<void> loadAllBoxesAndGroups(RoomModel room)
+  async {
+    var data = await _supabase
+        .from(RoomModel.roomTable)
+        .select()
+        .eq(BoxGroupModel.roomColumn, room.id!);
+
+    var groups =  List<BoxGroupModel>.from(
+        data.map((x) => BoxGroupModel.fromJson(x)));
   }
 }

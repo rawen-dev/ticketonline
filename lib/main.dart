@@ -3,14 +3,14 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:ticketonline/SeatReservationWidget.dart';
+import 'package:ticketonline/models/BoxModel.dart';
 import 'package:ticketonline/models/CustomerModel.dart';
 import 'package:ticketonline/models/OptionModel.dart';
 import 'package:ticketonline/models/TicketModel.dart';
 import 'package:ticketonline/services/DataService.dart';
 import 'package:ticketonline/services/TicketHelper.dart';
 import 'package:ticketonline/services/ToastHelper.dart';
-
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,8 +45,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'ticketonline',
       routerConfig: _router,
-      //routeInformationParser: _router.routeInformationParser,
-      //routerDelegate: _router.routerDelegate,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -89,7 +87,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   String title = "";
   int initialPrice = 0;
   int price = 0;
@@ -97,6 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
   FormBuilder? formBuilder = const FormBuilder(child: Spacer());
   final _emailFieldKey = GlobalKey<FormBuilderFieldState>();
   final String? occasionLink;
+  final Set<BoxModel> selectedSeats = {};
 
   _MyHomePageState(this.occasionLink);
 
@@ -108,7 +106,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -129,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Container(
-          constraints: BoxConstraints(maxWidth: 400),
+          constraints: const BoxConstraints(maxWidth: 480),
           child: SingleChildScrollView(
             child: Column(
               children: [ formBuilder!, Text("Celková cena: $price") ]
@@ -143,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void loadData() async {
     var occasion = await DataService.getOccasionModelByLink(occasionLink??"");
-    if(occasion==null)
+    if(occasion == null)
     {
       setState(() {
         title = "vstupenka.online";
@@ -217,10 +214,26 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 10),
             FormBuilderTextField(
               name: 'place',
-              decoration: const InputDecoration(labelText: 'Místo k sezení'),
+              enableInteractiveSelection: false,
+              readOnly: true,
+              decoration: const InputDecoration(labelText: 'Místo k sezení', suffixIcon: Icon(Icons.event_seat)),
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(),
               ]),
+              onTap: () async {
+                _formKey.currentState?.save();
+                await showGeneralDialog(
+                  context: context,
+                  barrierColor: Colors.black12.withOpacity(0.6), // Background color
+                  barrierDismissible: false,
+                  barrierLabel: 'Dialog',
+                  transitionDuration: const Duration(milliseconds: 300),
+                  pageBuilder: (context, __, ___) {
+                    return SeatReservationWidget(occasion: occasion, selectedSeats: selectedSeats);
+                  },
+                );
+                _formKey.currentState?.fields['place']!.didChange(selectedSeats.firstOrNull?.toString());
+              },
             ),
             const SizedBox(height: 10),
             foodGroup,
@@ -243,10 +256,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     var name = _formKey.currentState?.fields['name']!.value;
                     var surname = _formKey.currentState?.fields['surname']!.value;
                     var note = _formKey.currentState?.fields['note']!.value;
+                    var place = selectedSeats.firstOrNull;
 
                     var customer = CustomerModel(email: email, name: name, surname: surname);
 
-                    var ticket = TicketModel(occasion: occasion.id, price: price, note: note,
+                    var ticket = TicketModel(occasion: occasion.id,
+                        price: price,
+                        note: note,
+                        box: place,
                         options: [
                       _formKey.currentState?.fields[groups[0].code]!.value,
                       _formKey.currentState?.fields[groups[1].code]!.value

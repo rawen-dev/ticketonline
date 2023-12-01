@@ -1,11 +1,10 @@
+import 'package:ticketonline/models/BoxModel.dart';
 import 'package:ticketonline/models/CustomerModel.dart';
-import 'package:ticketonline/models/SeatModel.dart';
 
 import 'OptionModel.dart';
 
 class TicketModel{
   static const String ticketTable = "tickets";
-  static const String ticketSeatTable = "ticket_seat";
   static const String ticketExtraTable = "ticket_option";
 
   static const String idColumn = "id";
@@ -15,7 +14,7 @@ class TicketModel{
   static const String occasionColumn = "occasion";
   static const String priceColumn = "price";
   static const String noteColumn = "note";
-
+  static const String boxColumn = "box";
 
 
   static const String unpaidState = "unpaid";
@@ -26,8 +25,9 @@ class TicketModel{
   CustomerModel? customer;
   String? note;
   String? state;
-  SeatModel? seat;
+  BoxModel? box;
   int? price;
+  int? boxId;
   List<OptionModel>? options;
 
   TicketModel({
@@ -37,7 +37,9 @@ class TicketModel{
     this.customer,
     this.state,
     this.note,
+    this.box,
     this.price,
+    this.boxId,
     this.options
   });
 
@@ -49,6 +51,7 @@ class TicketModel{
       customer: json[customerColumn] != null ? CustomerModel(id: json[customerColumn]):null,
       state: json[stateColumn],
       note: json[noteColumn],
+      boxId: json[boxColumn],
       price: json[priceColumn],
     );
   }
@@ -59,7 +62,8 @@ class TicketModel{
       stateColumn: state??unpaidState,
       occasionColumn: occasion,
       noteColumn: note,
-      priceColumn: price
+      priceColumn: price,
+      boxColumn: boxId??box?.id
     };
     if(id != null)
     {
