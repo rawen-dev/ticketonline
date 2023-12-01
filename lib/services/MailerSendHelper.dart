@@ -16,7 +16,6 @@ class MailerSendHelper{
       {"var":"seat", "value": ticket.box!.name!},
       {"var":"price", "value": ticket.price.toString()},
       {"var":"note", "value": ticket.note??"" },
-
     ];
 
     for(var e in ticket.options!)

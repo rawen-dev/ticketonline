@@ -87,6 +87,7 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                             currentBoxGroup!.boxes!.add(model.boxModel!);
 
                             changedBoxes.add(model);
+                            ToastHelper.Show("Přidáno sedadlo ${model.boxModel!.name}.");
                           }
                           else if (currentSelectionMode==selectionMode.normal)
                           {
@@ -104,34 +105,15 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                             //available
                             var alreadySelected = allBoxes.where((b) => b.seatState == SeatState.selected);
                             if(alreadySelected.isNotEmpty)
-                              {
-                                ToastHelper.Show("Je možné vybrat pouze jedno místo!");
-                                return;
-                              }
-
-                            // for (var element in alreadySelected.toList()) {
-                            //   element.seatState = SeatState.available;
-                            //   changedBoxes.remove(element);
-                            // }
+                            {
+                              ToastHelper.Show("Je možné vybrat pouze jedno místo!");
+                              return;
+                            }
                             model.seatState = SeatState.selected;
                             changedBoxes.add(model);
                           }
                         },
-                        // onSeatStateChanged: (rowI, colI, seatState) {
-                        //   ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        //   ScaffoldMessenger.of(context).showSnackBar(
-                        //     SnackBar(
-                        //       content: seatState == SeatState.selected
-                        //           ? Text("Selected Seat[$rowI][$colI]")
-                        //           : Text("De-selected Seat[$rowI][$colI]"),
-                        //     ),
-                        //   );
-                        //   if (seatState == SeatState.selected) {
-                        //     selectedSeats.add(SeatNumber(rowI: rowI, colI: colI));
-                        //   } else {
-                        //     selectedSeats.remove(SeatNumber(rowI: rowI, colI: colI));
-                        //   }
-                        // },
+
                         stateModel: SeatLayoutStateModel(
                           pathDisabledSeat: 'assets/svg_disabled_bus_seat.svg',
                           pathSelectedSeat: 'assets/svg_selected_bus_seats.svg',
@@ -304,26 +286,6 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
       currentHeight = room!.height!;
       currentWidth = room!.width!;
     });
-  }
-}
-
-class SeatNumber {
-  final int rowI;
-  final int colI;
-
-  const SeatNumber({required this.rowI, required this.colI});
-
-  @override
-  bool operator ==(Object other) {
-    return rowI == (other as SeatNumber).rowI && colI == (other as SeatNumber).colI;
-  }
-
-  @override
-  int get hashCode => rowI.hashCode;
-
-  @override
-  String toString() {
-    return '[$rowI][$colI]';
   }
 }
 
