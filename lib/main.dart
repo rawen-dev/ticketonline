@@ -133,6 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // in the middle of the parent.
         child: SingleChildScrollView(
           child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
             constraints: const BoxConstraints(maxWidth: 440),
             child: Column(
               children: [

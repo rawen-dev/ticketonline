@@ -90,4 +90,9 @@ class BoxModel{
   {
     return "stůl ${boxGroup}, sedadlo ${name}";
   }
+
+  toShortString()
+  {
+    return "${boxGroup??""}${name??""}";
+  }
 }

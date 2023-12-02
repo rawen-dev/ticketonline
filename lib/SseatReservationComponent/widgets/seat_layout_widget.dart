@@ -34,10 +34,24 @@ class SeatLayoutWidget extends StatelessWidget {
                 (rowI) => Row(
                   children: [
                     ...List<int>.generate(stateModel.cols, (colI) => colI)
-                        .map<SeatWidget>((colI) => SeatWidget(
-                              model: createSeat(colI, rowI),
-                              onSeatTap: onSeatTap,
-                            ))
+                        .map<Widget>((colI) {
+                          var seatModel = createSeat(colI, rowI);
+                          if(seatModel.boxModel != null)
+                          {
+                            return Tooltip(
+                              message: seatModel.boxModel!.toShortString()??"",
+                              child: SeatWidget(
+                                model: seatModel,
+                                onSeatTap: onSeatTap,
+                              ),
+                            );
+                          }
+
+                          return SeatWidget(
+                            model: seatModel,
+                            onSeatTap: onSeatTap,
+                          );
+                        })
                         .toList()
                   ],
                 ),
