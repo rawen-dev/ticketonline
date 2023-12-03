@@ -39,6 +39,7 @@ class SeatLayoutWidget extends StatelessWidget {
                           if(seatModel.boxModel != null)
                           {
                             return Tooltip(
+                              showDuration: const Duration(seconds: 0),
                               message: seatModel.boxModel!.toShortString()??"",
                               child: SeatWidget(
                                 model: seatModel,
