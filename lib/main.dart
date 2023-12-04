@@ -194,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ),
-        ),// This trailing comma makes auto-formatting nicer for build methods.
+      ),// This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
@@ -251,7 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: [
             FormBuilderTextField(
-              autofillHints: const [AutofillHints.name],
+              autofillHints: const [AutofillHints.givenName],
               name: CustomerModel.nameColumn,
               decoration: const InputDecoration(labelText: 'Jméno'),
               validator: FormBuilderValidators.compose([
@@ -260,7 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 10),
             FormBuilderTextField(
-              autofillHints: const [AutofillHints.givenName],
+              autofillHints: const [AutofillHints.familyName],
               name: CustomerModel.surnameColumn,
               decoration: const InputDecoration(labelText: 'Příjmení'),
               validator: FormBuilderValidators.compose([
