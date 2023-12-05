@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
-import 'package:ticketonline/SseatReservationComponent/model/seat_layout_state_model.dart';
-import 'package:ticketonline/SseatReservationComponent/model/seat_model.dart';
-import 'package:ticketonline/SseatReservationComponent/utils/seat_state.dart';
-import 'package:ticketonline/SseatReservationComponent/widgets/seat_widget.dart';
+import 'package:ticketonline/SeatReservationComponent/model/seat_layout_state_model.dart';
+import 'package:ticketonline/SeatReservationComponent/model/seat_model.dart';
+import 'package:ticketonline/SeatReservationComponent/utils/seat_state.dart';
+import 'package:ticketonline/SeatReservationComponent/widgets/seat_widget.dart';
 
 
 class SeatLayoutWidget extends StatelessWidget {

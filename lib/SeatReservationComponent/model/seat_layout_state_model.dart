@@ -1,24 +1,23 @@
-import 'package:ticketonline/SseatReservationComponent/utils/seat_state.dart';
 import 'package:ticketonline/models/BoxModel.dart';
+import 'package:ticketonline/SeatReservationComponent/model/seat_model.dart';
 
-
-class SeatModel {
-  SeatState seatState;
-  final int rowI;
-  final int colI;
+class SeatLayoutStateModel {
+  final int rows;
+  final int cols;
+  final List<BoxModel> currentBoxes;
+  final List<SeatModel> allBoxes;
   final int seatSvgSize;
   final String pathSelectedSeat;
   final String pathUnSelectedSeat;
   final String pathSoldSeat;
   final String pathDisabledSeat;
   final String pathEmptySpace;
-  BoxModel? boxModel;
 
-  SeatModel({
-    required this.boxModel,
-    required this.seatState,
-    required this.rowI,
-    required this.colI,
+  const SeatLayoutStateModel({
+    required this.rows,
+    required this.cols,
+    required this.currentBoxes,
+    required this.allBoxes,
     this.seatSvgSize = 50,
     required this.pathSelectedSeat,
     required this.pathDisabledSeat,
@@ -26,5 +25,4 @@ class SeatModel {
     required this.pathUnSelectedSeat,
     required this.pathEmptySpace,
   });
-
 }

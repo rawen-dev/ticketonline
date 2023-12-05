@@ -1,5 +1,5 @@
 import 'package:ticketonline/models/BoxGroupModel.dart';
-import 'package:ticketonline/SseatReservationComponent/utils/seat_state.dart';
+import 'package:ticketonline/SeatReservationComponent/utils/seat_state.dart';
 
 class BoxModel{
   static const String soldType = "sold";
