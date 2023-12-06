@@ -43,6 +43,8 @@ dependencies:
   flutter_svg: ^2.0.9
   collection: ^1.17.2
   flutter_widget_from_html: ^0.14.9
+  flutter_secure_storage: ^9.0.0
+  pluto_grid: ^7.0.2
 
 dev_dependencies:
   flutter_test:

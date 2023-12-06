@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ticketonline/models/BoxGroupModel.dart';
 import 'package:ticketonline/models/BoxModel.dart';
@@ -7,10 +9,71 @@ import 'package:ticketonline/models/OptionGroupModel.dart';
 import 'package:ticketonline/models/OptionModel.dart';
 import 'package:ticketonline/models/RoomModel.dart';
 import 'package:ticketonline/models/TicketModel.dart';
+import 'package:ticketonline/models/UserInfoModel.dart';
 
 class DataService{
   static bool isEditor = false;
   static final _supabase = Supabase.instance.client;
+  static const _secureStorage =  FlutterSecureStorage();
+  static const REFRESH_TOKEN_KEY = 'refresh';
+
+  static Future<bool> tryAuthUser() async {
+    if (!await _secureStorage.containsKey(key: REFRESH_TOKEN_KEY)) {
+      return false;
+    }
+    var refresh = await _secureStorage.read(key: REFRESH_TOKEN_KEY);
+    try{
+      var result = await _supabase.auth.setSession(refresh.toString());
+      if (result.user != null) {
+        await _secureStorage.write(
+            key: REFRESH_TOKEN_KEY,
+            value: _supabase.auth.currentSession!.refreshToken.toString());
+        return true;
+      }
+    }
+    catch(e)
+    {
+      //invalid refresh token
+    }
+    return false;
+  }
+
+  static Future<void> login(String email, String password) async {
+    var data = await _supabase.auth
+        .signInWithPassword(email: email, password: password);
+    await _secureStorage.write(
+        key: REFRESH_TOKEN_KEY, value: data.session!.refreshToken.toString());
+  }
+
+  static isLoggedIn() {
+    return _supabase.auth.currentSession != null;
+  }
+
+  static Future<void> logout() async {
+    _secureStorage.delete(key: REFRESH_TOKEN_KEY);
+    _currentUser = null;
+    await _supabase.auth.signOut();
+  }
+
+  static ensureUserIsLoggedIn(){
+    if(!DataService.isLoggedIn())
+    {
+      throw Exception("User must be logged in.");
+    }
+  }
+
+  static UserInfoModel? _currentUser;
+  static Future<UserInfoModel> loadCurrentUserData() async {
+    ensureUserIsLoggedIn();
+    var jsonUser = await _supabase
+        .from(UserInfoModel.userInfoTable)
+        .select()
+        .eq(UserInfoModel.idColumn, _supabase.auth.currentUser!.id)
+        .single();
+    _currentUser = UserInfoModel.fromJson(jsonUser);
+    return _currentUser!;
+  }
+
   static Future<void> emailMailerSend(String recipient, String templateId, List<Map<String, String>> variables)
   async {
     await _supabase.rpc("send_email_mailersend",
@@ -25,6 +88,83 @@ class DataService{
   async {
     var userData = await _supabase.from(CustomerModel.customerTable).upsert(customer.toJson()).select().single();
     return CustomerModel.fromJson(userData);
+  }
+
+  static String? currentUserId() {
+    return _supabase.auth.currentUser?.id;
+  }
+
+  static Future<List<TicketModel>> getAllTickets()
+  async {
+    var occasionId = await getCurrentUserOccasion();
+
+    var data = await _supabase
+        .from(TicketModel.ticketTable)
+        .select(
+        "${TicketModel.idColumn},"
+            "${TicketModel.priceColumn},"
+            "${TicketModel.createdAtColumn},"
+            "${TicketModel.stateColumn},"
+            "${TicketModel.noteColumn},"
+            "${BoxModel.boxTable}"
+              "("
+                "${BoxModel.idColumn},"
+                "${BoxModel.nameColumn},"
+                "${BoxGroupModel.boxGroupsTable}"
+                  "("
+                    "${BoxGroupModel.idColumn},"
+                    "${BoxGroupModel.nameColumn}"
+                  ")"
+              "),"
+            "${CustomerModel.customerTable}"
+              "("
+                "${CustomerModel.idColumn},"
+                "${CustomerModel.nameColumn},"
+                "${CustomerModel.surnameColumn},"
+                "${CustomerModel.emailColumn}"
+              "),"
+            "${TicketModel.ticketOptionsTable}"
+              "("
+                "${TicketModel.ticketOptionsTableOption}"
+              ")"
+        )
+        .eq(TicketModel.occasionColumn, occasionId);
+    var tickets = List<TicketModel>.from(
+        data.map((x) => TicketModel.fromJson(x)));
+    var optionGroups = await getAllOptionGroups(occasionId);
+    var options = optionGroups.expand((element) => element.options!);
+    //add full option
+    for(var t in tickets)
+    {
+      List<OptionModel> fullOptions = [];
+      for(var o in t.options!)
+      {
+        var fullOption = options.firstWhereOrNull((element) => element.id == o.id);
+        if(fullOption!=null){
+          fullOptions.add(fullOption);
+        }
+      }
+      t.options!.clear();
+      t.options!.addAll(fullOptions);
+    }
+    return tickets;
+  }
+
+  static Future<int> getCurrentUserOccasion() async {
+    var occasion = await _supabase
+        .from(UserInfoModel.userOccasionTable)
+        .select()
+        .eq(UserInfoModel.userOccasionUserColumn, currentUserId())
+        .limit(1);
+    var occasionId = occasion[0][UserInfoModel.userOccasionOccasionColumn];
+    return occasionId;
+  }
+  
+  static Future<void> deleteTicket(TicketModel ticket)
+  async {
+    await _supabase.from(BoxModel.boxTable).update({BoxModel.typeColumn:BoxModel.availableType}).eq(BoxModel.idColumn, ticket.box!.id!);
+    await _supabase.from(TicketModel.ticketOptionsTable).delete().eq(TicketModel.ticketOptionsTableTicket, ticket.id);
+    await _supabase.from(TicketModel.ticketTable).delete().eq(TicketModel.idColumn, ticket.id);
   }
 
   static Future<TicketModel> updateTicket(TicketModel ticket)
@@ -42,7 +182,7 @@ class DataService{
     {
       for(var e in ticket.options!)
       {
-        await _supabase.from(TicketModel.ticketExtraTable).upsert({"ticket":ticket.id, "option":e.id});
+        await _supabase.from(TicketModel.ticketOptionsTable).upsert({"ticket":ticket.id, "option":e.id});
       }
     }
     return ticket;

@@ -7,6 +7,8 @@ class OptionGroupModel{
   static const String codeColumn = "code";
   static const String occasionColumn = "occasion";
 
+  static const String foodOption = "food";
+  static const String taxiOption = "taxi";
 
   int? id;
   int? occasion;

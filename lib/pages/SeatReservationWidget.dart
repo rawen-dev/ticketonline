@@ -73,33 +73,13 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          GestureDetector(
-                            onTap: (){
-                              if(currentBoxGroup!=null)
-                              {
-                                currentSelectionMode = selectionMode.addBlack;
-                              }
-                            },
-                            child: SvgPicture.asset(
-                              'assets/svg_disabled_bus_seat.svg',
-                              width: 15,
-                              height: 15,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Text("stůl")
-                        ],
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
                           SvgPicture.asset(
                             'assets/svg_sold_bus_seat.svg',
                             width: 15,
                             height: 15,
                           ),
                           const SizedBox(width: 8),
-                          const Text("vyprodané")
+                          const Text("obsazené")
                         ],
                       ),
                       Row(
@@ -132,6 +112,26 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                           ),
                           const SizedBox(width: 8),
                           const Text("vybrané")
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              if(currentBoxGroup!=null)
+                              {
+                                currentSelectionMode = selectionMode.addBlack;
+                              }
+                            },
+                            child: SvgPicture.asset(
+                              'assets/svg_disabled_bus_seat.svg',
+                              width: 15,
+                              height: 15,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Text("stůl")
                         ],
                       ),
                     ],

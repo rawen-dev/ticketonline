@@ -26,7 +26,7 @@ class CustomerModel{
   static CustomerModel fromJson(Map<String, dynamic> json) {
     return CustomerModel(
       id: json[idColumn],
-      createdAt: DateTime.parse(json[createdAtColumn]),
+      createdAt: json[createdAtColumn] != null ? DateTime.parse(json[createdAtColumn]) : null,
       email: json[emailColumn],
       name: json[nameColumn],
       surname: json[surnameColumn],
@@ -47,4 +47,7 @@ class CustomerModel{
     }
     return map;
   }
+
+  @override
+  String toString() => "${name} ${surname} (${email})";
 }

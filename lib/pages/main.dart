@@ -5,8 +5,11 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:ticketonline/ResultWidget.dart';
-import 'package:ticketonline/SeatReservationWidget.dart';
+import 'package:ticketonline/Config.dart';
+import 'package:ticketonline/pages/DashboardPage.dart';
+import 'package:ticketonline/pages/LoginPage.dart';
+import 'package:ticketonline/pages/ResultWidget.dart';
+import 'package:ticketonline/pages/SeatReservationWidget.dart';
 import 'package:ticketonline/models/BoxModel.dart';
 import 'package:ticketonline/models/CustomerModel.dart';
 import 'package:ticketonline/models/OccasionModel.dart';
@@ -20,8 +23,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(
-    url: 'https://zsyryiiwkcpjhtdptdhp.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpzeXJ5aWl3a2Nwamh0ZHB0ZGhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDEwOTQzODYsImV4cCI6MjAxNjY3MDM4Nn0.ZeF5HXnaq8A5amCfEQFrXqJ-X1IwqpTIRHRShv-gezE',
+    url: Config.supabase_url,
+    anonKey: Config.anon_key,
   );
   runApp(const MyApp());
 }
@@ -32,6 +35,14 @@ final _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) => const MyHomePage(),
+    ),
+    GoRoute(
+      path: DashboardPage.ROUTE,
+      builder: (context, state) => const DashboardPage(),
+    ),
+    GoRoute(
+    path: LoginPage.ROUTE,
+    builder: (context, state) => const LoginPage(),
     ),
     GoRoute(
       path: '/:occasionLink',
