@@ -27,10 +27,10 @@ class TicketModel extends IPlutoRowModel {
   static const String foodOptionsColumn = "foodOptions";
   static const String taxiOptionsColumn = "taxiOptions";
 
-  static const String unpaidState = "unpaid";
+  static const String reservedState = "reserved";
   static const String paidState = "paid";
 
-  static const states = [unpaidState, paidState];
+  static const states = [reservedState, paidState];
 
   int? id;
   DateTime? createdAt;
@@ -73,7 +73,7 @@ class TicketModel extends IPlutoRowModel {
 
   Map<String, dynamic> toJson() {
     var map = {
-      stateColumn: state??unpaidState,
+      stateColumn: state??reservedState,
       occasionColumn: occasion,
       priceColumn: price,
       boxColumn: boxId??box?.id
