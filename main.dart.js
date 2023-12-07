@@ -113884,10 +113884,10 @@ A.a_e.prototype={
 aoz(a){var s,r,q,p,o,n,m,l
 for(s=a.length,r=this.a,q=this.c,p=0;p<s;++p){o=a[p]
 for(n=o.a-r,m=o.b-r;n<=m;++n){l=B.e.cS(n,5)
-q[l]=(q[l]|B.tq[n&31])>>>0}}},
+q[l]=(q[l]|B.tr[n&31])>>>0}}},
 lB(a){var s=this.a
 if(s<=a)if(a<=this.b){s=a-s
-s=(this.c[B.e.cS(s,5)]&B.tq[s&31])>>>0!==0}else s=!1
+s=(this.c[B.e.cS(s,5)]&B.tr[s&31])>>>0!==0}else s=!1
 else s=!1
 return s},
 $ifA:1}
@@ -122677,7 +122677,7 @@ if(q!=null)r.n(0,"id",B.e.j(q))
 return r}}
 A.jz.prototype={
 cQ(){var s,r,q=this,p=q.f
-if(p==null)p="unpaid"
+if(p==null)p="reserved"
 s=q.x
 if(s==null){s=q.r
 s=s==null?null:s.a}r=A.N(["state",p,"occasion",q.c,"price",q.w,"box",s],t.N,t.X)
@@ -122780,7 +122780,7 @@ n.toString
 B.b.F(o,n)}case 1:return A.t(q,r)}})
 return A.u($async$i7,r)},
 G(a){var s=this,r=null,q="yyyy-MM-dd",p="#,###",o=t.p,n=A.a([A.nv(B.afg,s.gayI())],o),m=A.iB(!1,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"id",r,!1,!0,r,B.a8,"Id",B.a8,new A.kM(""),50),l=A.iB(!1,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"created_at",r,!1,!0,r,B.a8,"Datum",B.a8,new A.lr(new A.cj(Date.now(),!1),r,r,q,!0,B.R7,A.ao1(q),A.ao1("yyyy-MM")),100),k=A.iB(!1,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"customer",r,!1,!0,r,B.a8,"Objednal",B.a8,new A.kM(""),350),j=A.bpS(p,r),i=B.c.cm(p,".")
-m=A.a([m,l,k,A.iB(!1,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"price",r,!1,!0,r,B.a8,"Cena",B.a8,new A.ls(r,!1,!0,!1,j,i<0?0:B.c.bD(p,i).length-1),70),A.iB(!0,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"state",new A.aPD(),!1,!1,r,B.a8,"Stav",B.a8,A.a0Q(B.tr),100),A.iB(!1,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"box",r,!1,!0,r,B.a8,"Sedadlo",B.a8,new A.kM(""),150),A.iB(!1,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"foodOptions",r,!1,!1,new A.aPE(),B.a8,"J\xeddlo",B.a8,A.a0Q(s.e),250),A.iB(!1,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"taxiOptions",r,!1,!1,new A.aPF(),B.a8,"Odvoz",B.a8,A.a0Q(s.d),200),A.iB(!1,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"note",r,!1,!0,r,B.a8,"Pozn\xe1mka",B.a8,new A.kM(""),300)],t.F)
+m=A.a([m,l,k,A.iB(!1,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"price",r,!1,!0,r,B.a8,"Cena",B.a8,new A.ls(r,!1,!0,!1,j,i<0?0:B.c.bD(p,i).length-1),70),A.iB(!0,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"state",new A.aPD(),!1,!1,r,B.a8,"Stav",B.a8,A.a0Q(B.tq),100),A.iB(!1,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"box",r,!1,!0,r,B.a8,"Sedadlo",B.a8,new A.kM(""),150),A.iB(!1,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"foodOptions",r,!1,!1,new A.aPE(),B.a8,"J\xeddlo",B.a8,A.a0Q(s.e),250),A.iB(!1,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"taxiOptions",r,!1,!1,new A.aPF(),B.a8,"Odvoz",B.a8,A.a0Q(s.d),200),A.iB(!1,r,!0,!0,!0,!0,!0,!0,!1,!0,!0,"note",r,!1,!0,r,B.a8,"Pozn\xe1mka",B.a8,new A.kM(""),300)],t.F)
 l=t.cU
 s.f=new A.N1(A.aE(l),A.aE(l),A.aE(l),A.a([],t.C),m,A.bmC(),B.qC,"id",A.bti(),n,t.Zx)
 return new A.HU(1,A.CX(A.aju(r,B.a8_,r,B.afo),new A.NG(A.a([s.f.aom()],o),B.a0x,r),r),r)},
@@ -122795,7 +122795,7 @@ A.aPH.prototype={
 $1(a){return a.d==="taxi"},
 $S:115}
 A.aPD.prototype={
-$1(a){return A.bmB(a,B.tr)},
+$1(a){return A.bmB(a,B.tq)},
 $S:127}
 A.aPE.prototype={
 $1(a){return A.b8D(a)},
@@ -132484,6 +132484,7 @@ B.WY=new A.H(B.M,[659,"supports"],t.M)
 B.X8=new A.H(B.M,[660,"viewport"],t.M)
 B.X_=new A.H(B.M,[661,"-ms-viewport"],t.M)
 B.tp=A.a(s([B.Xo,B.WR,B.Xq,B.X6,B.Xg,B.X7,B.Xp,B.WZ,B.X2,B.WT,B.Xc,B.Xe,B.Xr,B.WS,B.X4,B.Xj,B.X5,B.WV,B.WY,B.X8,B.X_]),t.Mq)
+B.tq=A.a(s(["reserved","paid"]),t.s)
 B.d_=new A.fo(1,"fuchsia")
 B.dx=new A.fo(3,"linux")
 B.dy=new A.fo(5,"windows")
@@ -132496,8 +132497,7 @@ B.m0=A.a(s([B.yh,B.yi,B.yj]),A.a8("z<BJ>"))
 B.V7=A.a(s(["tbody","tfoot","thead","html"]),t.s)
 B.V8=A.a(s(["title","textarea"]),t.s)
 B.m1=A.a(s([!0,!1]),t.HZ)
-B.tq=A.a(s([1,2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768,65536,131072,262144,524288,1048576,2097152,4194304,8388608,16777216,33554432,67108864,134217728,268435456,536870912,1073741824,2147483648]),t.t)
-B.tr=A.a(s(["unpaid","paid"]),t.s)
+B.tr=A.a(s([1,2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768,65536,131072,262144,524288,1048576,2097152,4194304,8388608,16777216,33554432,67108864,134217728,268435456,536870912,1073741824,2147483648]),t.t)
 B.V9=A.a(s([B.mA,B.my]),t.Vd)
 B.Va=A.a(s(["*::class","*::dir","*::draggable","*::hidden","*::id","*::inert","*::itemprop","*::itemref","*::itemscope","*::lang","*::spellcheck","*::title","*::translate","A::accesskey","A::coords","A::hreflang","A::name","A::shape","A::tabindex","A::target","A::type","AREA::accesskey","AREA::alt","AREA::coords","AREA::nohref","AREA::shape","AREA::tabindex","AREA::target","AUDIO::controls","AUDIO::loop","AUDIO::mediagroup","AUDIO::muted","AUDIO::preload","BDO::dir","BODY::alink","BODY::bgcolor","BODY::link","BODY::text","BODY::vlink","BR::clear","BUTTON::accesskey","BUTTON::disabled","BUTTON::name","BUTTON::tabindex","BUTTON::type","BUTTON::value","CANVAS::height","CANVAS::width","CAPTION::align","COL::align","COL::char","COL::charoff","COL::span","COL::valign","COL::width","COLGROUP::align","COLGROUP::char","COLGROUP::charoff","COLGROUP::span","COLGROUP::valign","COLGROUP::width","COMMAND::checked","COMMAND::command","COMMAND::disabled","COMMAND::label","COMMAND::radiogroup","COMMAND::type","DATA::value","DEL::datetime","DETAILS::open","DIR::compact","DIV::align","DL::compact","FIELDSET::disabled","FONT::color","FONT::face","FONT::size","FORM::accept","FORM::autocomplete","FORM::enctype","FORM::method","FORM::name","FORM::novalidate","FORM::target","FRAME::name","H1::align","H2::align","H3::align","H4::align","H5::align","H6::align","HR::align","HR::noshade","HR::size","HR::width","HTML::version","IFRAME::align","IFRAME::frameborder","IFRAME::height","IFRAME::marginheight","IFRAME::marginwidth","IFRAME::width","IMG::align","IMG::alt","IMG::border","IMG::height","IMG::hspace","IMG::ismap","IMG::name","IMG::usemap","IMG::vspace","IMG::width","INPUT::accept","INPUT::accesskey","INPUT::align","INPUT::alt","INPUT::autocomplete","INPUT::autofocus","INPUT::checked","INPUT::disabled","INPUT::inputmode","INPUT::ismap","INPUT::list","INPUT::max","INPUT::maxlength","INPUT::min","INPUT::multiple","INPUT::name","INPUT::placeholder","INPUT::readonly","INPUT::required","INPUT::size","INPUT::step","INPUT::tabindex","INPUT::type","INPUT::usemap","INPUT::value","INS::datetime","KEYGEN::disabled","KEYGEN::keytype","KEYGEN::name","LABEL::accesskey","LABEL::for","LEGEND::accesskey","LEGEND::align","LI::type","LI::value","LINK::sizes","MAP::name","MENU::compact","MENU::label","MENU::type","METER::high","METER::low","METER::max","METER::min","METER::value","OBJECT::typemustmatch","OL::compact","OL::reversed","OL::start","OL::type","OPTGROUP::disabled","OPTGROUP::label","OPTION::disabled","OPTION::label","OPTION::selected","OPTION::value","OUTPUT::for","OUTPUT::name","P::align","PRE::width","PROGRESS::max","PROGRESS::min","PROGRESS::value","SELECT::autocomplete","SELECT::disabled","SELECT::multiple","SELECT::name","SELECT::required","SELECT::size","SELECT::tabindex","SOURCE::type","TABLE::align","TABLE::bgcolor","TABLE::border","TABLE::cellpadding","TABLE::cellspacing","TABLE::frame","TABLE::rules","TABLE::summary","TABLE::width","TBODY::align","TBODY::char","TBODY::charoff","TBODY::valign","TD::abbr","TD::align","TD::axis","TD::bgcolor","TD::char","TD::charoff","TD::colspan","TD::headers","TD::height","TD::nowrap","TD::rowspan","TD::scope","TD::valign","TD::width","TEXTAREA::accesskey","TEXTAREA::autocomplete","TEXTAREA::cols","TEXTAREA::disabled","TEXTAREA::inputmode","TEXTAREA::name","TEXTAREA::placeholder","TEXTAREA::readonly","TEXTAREA::required","TEXTAREA::rows","TEXTAREA::tabindex","TEXTAREA::wrap","TFOOT::align","TFOOT::char","TFOOT::charoff","TFOOT::valign","TH::abbr","TH::align","TH::axis","TH::bgcolor","TH::char","TH::charoff","TH::colspan","TH::headers","TH::height","TH::nowrap","TH::rowspan","TH::scope","TH::valign","TH::width","THEAD::align","THEAD::char","THEAD::charoff","THEAD::valign","TR::align","TR::bgcolor","TR::char","TR::charoff","TR::valign","TRACK::default","TRACK::kind","TRACK::label","TRACK::srclang","UL::compact","UL::type","VIDEO::controls","VIDEO::height","VIDEO::loop","VIDEO::mediagroup","VIDEO::muted","VIDEO::preload","VIDEO::width"]),t.s)
 B.WW=new A.H(B.M,[670,"top-left-corner"],t.M)
