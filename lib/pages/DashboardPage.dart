@@ -10,6 +10,7 @@ import 'package:ticketonline/models/OptionModel.dart';
 import 'package:ticketonline/models/TicketModel.dart';
 import 'package:ticketonline/pages/LoginPage.dart';
 import 'package:ticketonline/services/DataService.dart';
+import 'package:ticketonline/services/DialogHelper.dart';
 
 
 class DashboardPage extends StatefulWidget {
@@ -75,6 +76,23 @@ class _DashboardPageState extends State<DashboardPage> {
               type: PlutoColumnType.text(),
               readOnly: true,
               width: 50),
+          PlutoColumn(
+              width: 150,
+              title: "Vstupenka",
+              enableFilterMenuItem: false,
+              enableContextMenu: false,
+              enableSorting: false,
+              field: TicketModel.ticketImageColumn,
+              type: PlutoColumnType.text(defaultValue: null),
+              renderer: (rendererContext) {
+                return ElevatedButton(
+                    onPressed: (){
+                      var ticket = rendererContext.row.cells[TicketModel.ticketImageColumn]?.value as TicketModel;
+                      DialogHelper.showTicketDialog(context, ticket.toBasicString(), ticket);
+                    },
+                    child: Row(children: [const Icon(Icons.local_activity), Padding(padding: const EdgeInsets.all(6), child: const Text("Vstupenka")) ])
+                );
+              }),
           PlutoColumn(
             title: "Datum",
             readOnly: true,

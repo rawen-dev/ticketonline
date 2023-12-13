@@ -27,6 +27,8 @@ class TicketModel extends IPlutoRowModel {
   static const String foodOptionsColumn = "foodOptions";
   static const String taxiOptionsColumn = "taxiOptions";
 
+  static const String ticketImageColumn = "ticketImage";
+
   static const String reservedState = "reserved";
   static const String paidState = "paid";
 
@@ -109,6 +111,7 @@ class TicketModel extends IPlutoRowModel {
 
     return PlutoRow(cells: {
       idColumn: PlutoCell(value: id),
+      ticketImageColumn: PlutoCell(value: this),
       createdAtColumn: PlutoCell(value: DateFormat('yyyy-MM-dd').format(createdAt??DateTime.fromMicrosecondsSinceEpoch(0))),
       customerColumn: PlutoCell(value: customer.toString()),
       stateColumn: PlutoCell(value: state),
@@ -130,5 +133,5 @@ class TicketModel extends IPlutoRowModel {
   }
 
   @override
-  String toBasicString() => "Ticket ${id}";
+  String toBasicString() => "Lístek ${id}";
 }
