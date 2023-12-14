@@ -102,8 +102,8 @@ class DialogHelper{
                     version: QrVersions.auto,
                     size: 120,
                     gapless: false,
-                    dataModuleStyle: QrDataModuleStyle(dataModuleShape: QrDataModuleShape.circle, color: Color(0xFFFD3BFA0)),
-                    eyeStyle: QrEyeStyle(color: Color(0xFFD3BFA0), eyeShape: QrEyeShape.circle),),)
+                    dataModuleStyle: QrDataModuleStyle(dataModuleShape: QrDataModuleShape.square, color: Color(0xFFFD3BFA0)),
+                    eyeStyle: QrEyeStyle(color: Color(0xFFD3BFA0), eyeShape: QrEyeShape.square),),)
                   ],),
             );
   }
