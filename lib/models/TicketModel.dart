@@ -133,5 +133,5 @@ class TicketModel extends IPlutoRowModel {
   }
 
   @override
-  String toBasicString() => "Lístek ${id}";
+  String toBasicString() => "Vstupenka ${id}";
 }

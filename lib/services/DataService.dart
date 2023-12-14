@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ticketonline/models/BoxGroupModel.dart';
 import 'package:ticketonline/models/BoxModel.dart';
 import 'package:ticketonline/models/CustomerModel.dart';
+import 'package:ticketonline/models/EmailMetadataModel.dart';
 import 'package:ticketonline/models/OccasionModel.dart';
 import 'package:ticketonline/models/OptionGroupModel.dart';
 import 'package:ticketonline/models/OptionModel.dart';
@@ -74,14 +75,53 @@ class DataService{
     return _currentUser!;
   }
 
-  static Future<void> emailMailerSend(String recipient, String templateId, List<Map<String, String>> variables)
+  static Future<String> getEmailTemplate(String emailType, int occasion)
   async {
-    await _supabase.rpc("send_email_mailersend",
-        params: {"message": {
-          "sender": "info@ff23.cz",
-          "recipient": recipient,
-          "template_id": templateId
-        }, "subs": variables});
+    var data = await _supabase.from("email_type").select().match({"type": emailType, "occasion": occasion}).limit(1).single();
+    return data["template"];
+  }
+
+  static Future<void> emailWithAttachmentMailerSend(EmailMetadataModel metadata, List<Map<String, String>> variables, Map<String, String>? attachment)
+  async {
+    var data = {
+      "to":[
+        {
+          "email":metadata.recipient
+        }
+      ],
+      "template_id":metadata.template,
+      "reply_to": [
+        {
+          "email": metadata.recipient,
+          "name": "vstupenka.online"
+        }
+      ],
+      "variables": [
+        {
+          "email": metadata.recipient,
+          "substitutions": variables
+        }
+      ],
+      "attachments": [
+        attachment
+      ]
+    };
+    var response = await _supabase.rpc(
+        "send_email_via_mailersend",
+        params: {
+          "data": data,
+          "metadata": {
+            "template": metadata.template,
+            "subject": metadata.subject,
+            "recipient": metadata.recipient,
+            "occasion": metadata.occasion
+          }
+        });
+
+    if(response!=202)
+    {
+      throw Exception("Sending e-mail has failed.");
+    }
   }
 
   static Future<CustomerModel> updateCustomer(CustomerModel customer)
@@ -136,6 +176,7 @@ class DataService{
     //add full option
     for(var t in tickets)
     {
+      t.occasion = occasionId;
       List<OptionModel> fullOptions = [];
       for(var o in t.options!)
       {
@@ -147,6 +188,7 @@ class DataService{
       t.options!.clear();
       t.options!.addAll(fullOptions);
     }
+    tickets.sort((a,b) => a.createdAt!.compareTo(b.createdAt!));
     return tickets;
   }
 
@@ -165,6 +207,15 @@ class DataService{
     await _supabase.from(BoxModel.boxTable).update({BoxModel.typeColumn:BoxModel.availableType}).eq(BoxModel.idColumn, ticket.box!.id!);
     await _supabase.from(TicketModel.ticketOptionsTable).delete().eq(TicketModel.ticketOptionsTableTicket, ticket.id);
     await _supabase.from(TicketModel.ticketTable).delete().eq(TicketModel.idColumn, ticket.id);
+  }
+
+  static Future<void> updateTicketState(TicketModel ticket, String state)
+  async {
+    await _supabase.from(TicketModel.ticketTable).update(
+        {
+          TicketModel.stateColumn: state
+        })
+        .eq(TicketModel.idColumn, ticket.id);
   }
 
   static Future<TicketModel> updateTicket(TicketModel ticket)

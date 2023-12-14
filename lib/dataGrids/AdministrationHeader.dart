@@ -2,6 +2,7 @@ import 'package:ticketonline/dataGrids/SingleTableDataGrid.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import 'DataGridAction.dart';
 import 'PlutoAbstract.dart';
 import '../services/DialogHelper.dart';
 import '../services/ToastHelper.dart';
@@ -9,7 +10,7 @@ import '../services/ToastHelper.dart';
 class AdministrationHeader<T extends IPlutoRowModel> extends StatefulWidget {
   final PlutoGridStateManager stateManager;
   final SingleTableDataGrid dataGrid;
-  final List<Widget>? headerChildren;
+  final List<DataGridAction>? headerChildren;
 
   const AdministrationHeader({required this.stateManager, Key? key, required this.fromPlutoJson, required this.loadData, this.headerChildren, required this.dataGrid}) : super(key: key);
 
@@ -34,7 +35,7 @@ class _AdministrationHeaderState<T extends IPlutoRowModel> extends State<Adminis
   final T Function(Map<String, dynamic>) fromPlutoJson;
   final Future<void> Function() loadData;
   final SingleTableDataGrid dataGrid;
-  List<Widget>? headerChildren = [];
+  List<DataGridAction>? headerChildren = [];
   List<Widget> allChildren = [];
 
   _AdministrationHeaderState(this.fromPlutoJson, this.loadData, this.dataGrid, {this.headerChildren});
@@ -43,7 +44,10 @@ class _AdministrationHeaderState<T extends IPlutoRowModel> extends State<Adminis
   Widget build(BuildContext context) {
     allChildren.clear();
     headerChildren = headerChildren ?? [];
-    allChildren.addAll(headerChildren!);
+    for(var a in headerChildren!)
+    {
+      allChildren.add(ElevatedButton(onPressed: (){a.action(dataGrid);}, child: Text(a.name)));
+    }
     if(headerChildren!.isNotEmpty)
     {
       allChildren.insertAll(0, [const VerticalDivider()]);

@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import 'DataGridAction.dart';
 import 'PlutoAbstract.dart';
 import 'AdministrationHeader.dart';
 
@@ -21,7 +22,7 @@ class SingleTableDataGrid<T extends IPlutoRowModel> {
   final String idColumn;
   final T Function(Map<String, dynamic>) fromPlutoJson;
 
-  final List<Widget>? headerChildren;
+  final List<DataGridAction>? headerChildren;
 
   SingleTableDataGrid(this.loadData, this.fromPlutoJson, this.firstColumnType, this.idColumn, {required this.columns, this.headerChildren});
   DataGrid() {

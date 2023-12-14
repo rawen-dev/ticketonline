@@ -32,4 +32,8 @@ class OptionModel{
   String toString(){
     return name??"";
   }
+
+  String toStringWithPrice(){
+    return price !=null && price! > 0 ? "$name ($price Kč)": name.toString();
+  }
 }

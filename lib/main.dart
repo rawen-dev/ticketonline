@@ -197,7 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       }
                       debugPrint(_formKey.currentState?.value.toString());
                     },
-                    child: const Text("Koupit lístek")
+                    child: const Text("Koupit vstupenku")
                 ),
                 const SizedBox(height: 12),
               ]
@@ -239,7 +239,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     var foodOptions  = <FormBuilderFieldOption<OptionModel>>[];
     for (var element in foods.options!) {
-      foodOptions.add(FormBuilderFieldOption(value: element));
+      foodOptions.add(FormBuilderFieldOption(value: element, child: Text(element.toStringWithPrice()),));
     }
 
     chng(OptionModel? option)

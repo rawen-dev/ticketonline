@@ -59,3 +59,48 @@ BEGIN
   RETURN retval;
 END;
 $$;
+
+--drop function send_email_via_mailersend;
+CREATE OR REPLACE FUNCTION send_email_via_mailersend(data JSONB, metadata JSONB)
+  RETURNS json
+  LANGUAGE plpgsql
+  SECURITY DEFINER -- required in order to read keys in the private schema
+  -- Set a secure search_path: trusted schema(s), then 'pg_temp'.
+  -- SET search_path = admin, pg_temp;
+  AS $$
+DECLARE
+  retval json;
+  MAILERSEND_API_TOKEN text;
+BEGIN
+  SELECT value::text INTO MAILERSEND_API_TOKEN FROM private_keys WHERE key = 'MAILERSEND_API_TOKEN';
+  IF NOT found THEN RAISE 'missing entry in private_keys: MAILERSEND_API_TOKEN'; END IF;
+
+    SELECT
+        * INTO retval
+    FROM
+        http
+        ((
+            'POST',
+            'https://api.mailersend.com/v1/email',
+            ARRAY[http_header ('Authorization',
+            'Bearer ' || MAILERSEND_API_TOKEN
+            ), http_header ('X-Requested-With', 'XMLHttpRequest')],
+            'application/json',
+            data::text
+        ));
+
+        IF retval::text = '202' THEN
+          RAISE NOTICE 'message sent with mailersend: %',retval;
+
+          INSERT INTO public.email_log
+            (template, recipient, subject, occasion)
+          VALUES
+            (metadata->>'template', metadata->>'recipient', (metadata->>'subject')::int, (metadata->>'occasion')::int);
+
+        ELSE
+          RAISE 'error sending message with mailersend: %',retval;
+        END IF;
+
+  RETURN retval;
+END;
+$$;

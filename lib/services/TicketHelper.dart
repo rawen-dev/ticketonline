@@ -10,6 +10,7 @@ class TicketHelper {
     customer ??= await DataService.updateCustomer(newCustomer);
     newTicket.customer = customer;
     var ticket = await DataService.updateTicket(newTicket);
-    await MailerSendHelper.sendTicketPurchased(customer, ticket);
+    ticket.customer = customer;
+    await MailerSendHelper.sendTicketPurchased(ticket);
   }
 }

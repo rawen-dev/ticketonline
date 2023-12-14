@@ -6,6 +6,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:ticketonline/models/OptionGroupModel.dart';
 import 'package:ticketonline/models/TicketModel.dart';
+import 'package:ticketonline/services/MailerSendHelper.dart';
 
 class DialogHelper{
 
@@ -38,8 +39,6 @@ class DialogHelper{
       String titleMessage,
       TicketModel ticket) async{
     ScreenshotController screenshotController = ScreenshotController();
-    var placeTextStyle = TextStyle(color: Color(0xFFF6EBD8), fontWeight: FontWeight.w700, fontSize: 26);
-    var foodTextStyle = TextStyle(color: Color(0xFFF6EBD8), fontWeight: FontWeight.w700, fontSize: 16);
 
     await showDialog(
         context: context,
@@ -48,32 +47,14 @@ class DialogHelper{
             title: Text(titleMessage),
             content: Screenshot(
               controller: screenshotController,
-              child: Container(
-                width: 1024,
-                child: Stack(
-                    children: [
-                  Image(image: AssetImage("assets/vstupenky.png"),),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(205, 289, 0,  0),
-                    child: Text(ticket.box!.boxGroup!.name!, style: placeTextStyle)),
-                  Padding(
-                      padding: EdgeInsets.fromLTRB(205, 323, 0,  0),
-                      child: Text(ticket.box!.name!, style: placeTextStyle)),
-                  Padding(
-                      padding: EdgeInsets.fromLTRB(205, 365, 0,  0),
-                      child: Text(ticket.options?.firstWhereOrNull((element) => element.optionGroup!.code==OptionGroupModel.foodOption)?.name??"", style: foodTextStyle)),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(810, 260, 0,  0),
-                    child: QrImageView(
-                      data: ticket.id.toString(),
-                      version: QrVersions.auto,
-                      size: 120,
-                      gapless: false,
-                      dataModuleStyle: QrDataModuleStyle(dataModuleShape: QrDataModuleShape.circle, color: Color(0xFFFD3BFA0)),
-                      eyeStyle: QrEyeStyle(color: Color(0xFFD3BFA0), eyeShape: QrEyeShape.circle),),)
-                    ],),
-              ),),
+              child: ticketImageContainer(ticket)),
             actions: [
+              ElevatedButton(
+                child: const Text("Odeslat vstupenku (bez dalších akcí)"),
+                onPressed: () async {
+                  await MailerSendHelper.sendTicket(ticket);
+                },
+              ),
               ElevatedButton(
                 child: const Text("Stáhnout"),
                 onPressed: () async {
@@ -83,7 +64,6 @@ class DialogHelper{
                     return;
                   }
                   await WebImageDownloader.downloadImageFromUInt8List(uInt8List: captured, name: ticket.toBasicString());
-                  Navigator.of(context).pop();
                 },
               ),
               ElevatedButton(
@@ -96,6 +76,36 @@ class DialogHelper{
             ],
           );
         });
+  }
+
+  static Container ticketImageContainer(TicketModel ticket) {
+    var placeTextStyle = TextStyle(color: Color(0xFFF6EBD8), fontWeight: FontWeight.w700, fontSize: 26);
+    var foodTextStyle = TextStyle(color: Color(0xFFF6EBD8), fontWeight: FontWeight.w700, fontSize: 16);
+    return Container(
+              width: 1024,
+              child: Stack(
+                  children: [
+                Image(image: AssetImage("assets/vstupenky.png"),),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(205, 290, 0,  0),
+                  child: Text(ticket.box!.boxGroup!.name!, style: placeTextStyle)),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(205, 324, 0,  0),
+                    child: Text(ticket.box!.name!, style: placeTextStyle)),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(205, 365, 0,  0),
+                    child: Text(ticket.options?.firstWhereOrNull((element) => element.optionGroup!.code==OptionGroupModel.foodOption)?.name??"", style: foodTextStyle)),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(810, 260, 0,  0),
+                  child: QrImageView(
+                    data: ticket.id.toString(),
+                    version: QrVersions.auto,
+                    size: 120,
+                    gapless: false,
+                    dataModuleStyle: QrDataModuleStyle(dataModuleShape: QrDataModuleShape.circle, color: Color(0xFFFD3BFA0)),
+                    eyeStyle: QrEyeStyle(color: Color(0xFFD3BFA0), eyeShape: QrEyeShape.circle),),)
+                  ],),
+            );
   }
 
   static Future<bool> showConfirmationDialogAsync(
