@@ -212,16 +212,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void loadData() async {
-    await showGeneralDialog(
-      context: context,
-      barrierColor: Colors.black12.withOpacity(0.6), // Background color
-      barrierDismissible: false,
-      barrierLabel: 'Dialog',
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (context, __, ___) {
-        return InfoWidget();
-      },
-    );
+    // await showGeneralDialog(
+    //   context: context,
+    //   barrierColor: Colors.black12.withOpacity(0.6), // Background color
+    //   barrierDismissible: false,
+    //   barrierLabel: 'Dialog',
+    //   transitionDuration: const Duration(milliseconds: 300),
+    //   pageBuilder: (context, __, ___) {
+    //     return InfoWidget();
+    //   },
+    // );
     occasion = await DataService.getOccasionModelByLink(occasionLink??"");
     if(occasion == null)
     {
