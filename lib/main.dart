@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ticketonline/Config.dart';
 import 'package:ticketonline/pages/DashboardPage.dart';
+import 'package:ticketonline/pages/InfoWidget.dart';
 import 'package:ticketonline/pages/LoginPage.dart';
 import 'package:ticketonline/pages/ResultWidget.dart';
 import 'package:ticketonline/pages/SeatReservationWidget.dart';
@@ -119,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     loadData();
+    
   }
 
   @override
@@ -210,6 +212,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void loadData() async {
+    await showGeneralDialog(
+      context: context,
+      barrierColor: Colors.black12.withOpacity(0.6), // Background color
+      barrierDismissible: false,
+      barrierLabel: 'Dialog',
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, __, ___) {
+        return InfoWidget();
+      },
+    );
     occasion = await DataService.getOccasionModelByLink(occasionLink??"");
     if(occasion == null)
     {
