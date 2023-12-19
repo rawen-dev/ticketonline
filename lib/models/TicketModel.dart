@@ -22,6 +22,8 @@ class TicketModel extends IPlutoRowModel {
   static const String occasionColumn = "occasion";
   static const String priceColumn = "price";
   static const String noteColumn = "note";
+  static const String hiddenNoteColumn = "hidden_note";
+
   static const String boxColumn = "box";
   static const String optionsColumn = "options";
   static const String foodOptionsColumn = "foodOptions";
@@ -39,6 +41,7 @@ class TicketModel extends IPlutoRowModel {
   int? occasion;
   CustomerModel? customer;
   String? note;
+  String? hiddenNote;
   String? state;
   BoxModel? box;
   int? price;
@@ -52,6 +55,7 @@ class TicketModel extends IPlutoRowModel {
     this.customer,
     this.state,
     this.note,
+    this.hiddenNote,
     this.box,
     this.price,
     this.boxId,
@@ -66,6 +70,7 @@ class TicketModel extends IPlutoRowModel {
       customer: json[CustomerModel.customerTable] != null ? CustomerModel.fromJson(json[CustomerModel.customerTable]):null,
       state: json[stateColumn],
       note: json[noteColumn]??"",
+      hiddenNote: json[hiddenNoteColumn]??"",
       boxId: json[boxColumn],
       price: json[priceColumn],
       box: json[BoxModel.boxTable] != null ? BoxModel.fromJson(json[BoxModel.boxTable]) : null,
@@ -76,10 +81,21 @@ class TicketModel extends IPlutoRowModel {
   Map<String, dynamic> toJson() {
     var map = {
       stateColumn: state??reservedState,
-      occasionColumn: occasion,
       priceColumn: price,
-      boxColumn: boxId??box?.id
     };
+    var boxIdValue = boxId??box?.id;
+    if(boxIdValue != null)
+    {
+      map[boxColumn] = boxIdValue;
+    }
+    if(occasion != null)
+    {
+      map[occasionColumn] = occasion;
+    }
+    if(hiddenNote != null)
+    {
+      map[hiddenNoteColumn] = hiddenNote;
+    }
     if(note != null)
     {
       map[noteColumn] = note;
@@ -98,8 +114,7 @@ class TicketModel extends IPlutoRowModel {
   static TicketModel fromPlutoJson(Map<String, dynamic> json) {
     return TicketModel(
       id: json[idColumn] == -1 ? null : json[idColumn],
-      box: json[boxColumn],
-      state: json[stateColumn],
+      hiddenNote: json[hiddenNoteColumn],
       price: json[priceColumn],
     );
   }
@@ -116,6 +131,7 @@ class TicketModel extends IPlutoRowModel {
       customerColumn: PlutoCell(value: customer.toString()),
       stateColumn: PlutoCell(value: state),
       noteColumn: PlutoCell(value: note),
+      hiddenNoteColumn: PlutoCell(value: hiddenNote),
       boxColumn: PlutoCell(value: box),
       priceColumn: PlutoCell(value: price),
       foodOptionsColumn: PlutoCell(value: foodOption),
@@ -130,6 +146,7 @@ class TicketModel extends IPlutoRowModel {
 
   @override
   Future<void> updateMethod() async {
+    await DataService.updateTicket(this);
   }
 
   @override

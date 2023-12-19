@@ -146,6 +146,7 @@ class DataService{
             "${TicketModel.createdAtColumn},"
             "${TicketModel.stateColumn},"
             "${TicketModel.noteColumn},"
+            "${TicketModel.hiddenNoteColumn},"
             "${BoxModel.boxTable}"
               "("
                 "${BoxModel.idColumn},"
@@ -220,7 +221,7 @@ class DataService{
 
   static Future<TicketModel> updateTicket(TicketModel ticket)
   async {
-    var data = await _supabase.from(TicketModel.ticketTable).upsert(ticket.toJson()).select().single();
+    var data = await _supabase.from(TicketModel.ticketTable).update(ticket.toJson()).eq(TicketModel.idColumn, ticket.id).select().single();
     var updatedTicket = TicketModel.fromJson(data);
     ticket.id = updatedTicket.id;
     if(ticket.box != null)
