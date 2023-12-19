@@ -47,7 +47,7 @@ class DialogHelper{
             title: Text(titleMessage),
             content: Screenshot(
               controller: screenshotController,
-              child: qrPaymentContainer(ticket)),
+              child: ticketImageContainer(ticket)),
             actions: [
               ElevatedButton(
                 child: const Text("Odeslat vstupenku (bez dalších akcí)"),
