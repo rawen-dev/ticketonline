@@ -92,6 +92,9 @@ class _DashboardPageState extends State<DashboardPage> {
                 headerChildren: [
                   DataGridAction("Změnit na zaplaceno", (d) {
                     _changeToPaid(d);
+                  }),
+                  DataGridAction("Změnit na storno", (d) {
+                    _changeToStorno(d);
                   })
                 ],
                 columns: [
@@ -191,6 +194,41 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+  Future<void> _changeToStorno(SingleTableDataGrid dataGrid) async {
+    var tickets = List<TicketModel>.from(dataGrid.stateManager.refRows.originalList.where((element) => element.checked == true).map((x) => x.cells[TicketModel.ticketImageColumn]?.value as TicketModel));
+
+    var paid = tickets.where((element) => element.state == TicketModel.reservedState || element.state == TicketModel.paidState);
+
+    if(paid.isEmpty)
+    {
+      ToastHelper.Show("Nejsou označeny žádné vstupenky k změně na storno.");
+      return;
+    }
+
+    var really = await DialogHelper.showConfirmationDialogAsync(context,
+        "Odeslat storno e-mail a změnit stav na storno",
+        "Místo rezervované vstupenkou bude uvolněno, vstupenka bude označena jako storno a odešle se e-mail na toho, kdo si je objednal." +
+            "\n" +
+            "Vstupenky (${paid.length}):\n${paid.map((value) => value.toBasicString()).toList().join(",\n")}",
+        confirmButtonMessage: "Potvrdit");
+
+    if(!really)
+    {
+      return;
+    }
+
+    var allTickets = await DataService.getAllTickets();
+
+    for(var ticket in paid)
+    {
+      var ticketMatch = allTickets.firstWhere((t)=>t.id==ticket.id);
+      await MailerSendHelper.waitForApiLimit();
+      await MailerSendHelper.sendTicketStorno(ticketMatch);
+      await DataService.updateTicketState(ticketMatch, TicketModel.stornoState);
+    }
+    dataGrid.reloadData();
+  }
+
   Future<void> _changeToPaid(SingleTableDataGrid dataGrid) async {
     var tickets = List<TicketModel>.from(dataGrid.stateManager.refRows.originalList.where((element) => element.checked == true).map((x) => x.cells[TicketModel.ticketImageColumn]?.value as TicketModel));
 
@@ -219,7 +257,7 @@ class _DashboardPageState extends State<DashboardPage> {
     {
       var ticketMatch = allTickets.firstWhere((t)=>t.id==ticket.id);
       await MailerSendHelper.waitForApiLimit();
-      await MailerSendHelper.sendTicket(ticketMatch);
+      await MailerSendHelper.sendTicketPaid(ticketMatch);
       await DataService.updateTicketState(ticketMatch, TicketModel.paidState);
     }
     dataGrid.reloadData();

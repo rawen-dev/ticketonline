@@ -205,23 +205,37 @@ class DataService{
   
   static Future<void> deleteTicket(TicketModel ticket)
   async {
-    await _supabase.from(BoxModel.boxTable).update({BoxModel.typeColumn:BoxModel.availableType}).eq(BoxModel.idColumn, ticket.box!.id!);
+    await _supabase.from(BoxModel.boxTable).update({BoxModel.stateColumn:BoxModel.availableType}).eq(BoxModel.idColumn, ticket.box!.id!);
     await _supabase.from(TicketModel.ticketOptionsTable).delete().eq(TicketModel.ticketOptionsTableTicket, ticket.id);
     await _supabase.from(TicketModel.ticketTable).delete().eq(TicketModel.idColumn, ticket.id);
   }
 
   static Future<void> updateTicketState(TicketModel ticket, String state)
   async {
+    if(state==TicketModel.stornoState)
+    {
+      await _supabase.from(TicketModel.ticketOptionsTable).delete().eq(TicketModel.ticketOptionsTableTicket, ticket.id);
+      await _supabase.from(BoxModel.boxTable).update({BoxModel.stateColumn: BoxModel.availableType}).eq(BoxModel.idColumn, ticket.box!.id!);
+    }
     await _supabase.from(TicketModel.ticketTable).update(
-        {
-          TicketModel.stateColumn: state
-        })
-        .eq(TicketModel.idColumn, ticket.id);
+    {
+      TicketModel.boxColumn: null,
+      TicketModel.stateColumn: state
+    })
+    .eq(TicketModel.idColumn, ticket.id);
   }
 
   static Future<TicketModel> updateTicket(TicketModel ticket)
   async {
-    var data = await _supabase.from(TicketModel.ticketTable).update(ticket.toJson()).eq(TicketModel.idColumn, ticket.id).select().single();
+    dynamic data;
+    if(ticket.id!=null)
+    {
+      data = await _supabase.from(TicketModel.ticketTable).update(ticket.toJson()).eq(TicketModel.idColumn, ticket.id).select().single();
+    }
+    else
+    {
+      data = await _supabase.from(TicketModel.ticketTable).upsert(ticket.toJson()).select().single();
+    }
     var updatedTicket = TicketModel.fromJson(data);
     ticket.id = updatedTicket.id;
     if(ticket.box != null)
@@ -314,7 +328,7 @@ class DataService{
         .from(BoxModel.boxTable)
         .select(
         "${BoxModel.idColumn},"
-        "${BoxModel.typeColumn},"
+        "${BoxModel.stateColumn},"
         "${BoxModel.occasionColumn},"
         "${BoxModel.roomColumn},"
         "${BoxModel.nameColumn},"

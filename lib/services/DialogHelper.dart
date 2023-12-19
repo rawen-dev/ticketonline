@@ -52,7 +52,7 @@ class DialogHelper{
               ElevatedButton(
                 child: const Text("Odeslat vstupenku (bez dalších akcí)"),
                 onPressed: () async {
-                  await MailerSendHelper.sendTicket(ticket);
+                  await MailerSendHelper.sendTicketPaid(ticket);
                 },
               ),
               ElevatedButton(

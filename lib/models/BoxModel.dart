@@ -9,7 +9,7 @@ class BoxModel{
 
   static const String boxTable = "boxes";
 
-  static const String typeColumn = "type";
+  static const String stateColumn = "type";
   static const String idColumn = "id";
   static const String occasionColumn = "occasion";
   static const String nameColumn = "name";
@@ -47,7 +47,7 @@ class BoxModel{
       id: json[idColumn],
       occasion: json[occasionColumn],
       name: json[nameColumn],
-      type: json[typeColumn],
+      type: json[stateColumn],
       room: json[roomColumn],
       x: json[xColumn],
       y: json[yColumn],
@@ -61,7 +61,7 @@ class BoxModel{
     var map = {
       occasionColumn: occasion,
       nameColumn: name,
-      typeColumn: type,
+      stateColumn: type,
       boxGroupColumn: boxGroupId,
       roomColumn: room,
       xColumn: x,

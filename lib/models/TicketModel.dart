@@ -33,8 +33,10 @@ class TicketModel extends IPlutoRowModel {
 
   static const String reservedState = "reserved";
   static const String paidState = "paid";
+  static const String stornoState = "storno";
 
-  static const states = [reservedState, paidState];
+
+  static const states = [reservedState, paidState, stornoState];
 
   int? id;
   DateTime? createdAt;
@@ -132,7 +134,7 @@ class TicketModel extends IPlutoRowModel {
       stateColumn: PlutoCell(value: state),
       noteColumn: PlutoCell(value: note),
       hiddenNoteColumn: PlutoCell(value: hiddenNote),
-      boxColumn: PlutoCell(value: box),
+      boxColumn: PlutoCell(value: box??""),
       priceColumn: PlutoCell(value: price),
       foodOptionsColumn: PlutoCell(value: foodOption),
       taxiOptionsColumn: PlutoCell(value: taxiOption),

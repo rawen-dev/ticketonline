@@ -9,7 +9,7 @@ import 'package:ticketonline/services/DialogHelper.dart';
 import 'ToastHelper.dart';
 
 class MailerSendHelper{
-  static Future<void> sendTicket(TicketModel ticket) async {
+  static Future<void> sendTicketPaid(TicketModel ticket) async {
 
     List<Map<String, String>> allVars = getAllVarsFromTicket(ticket);
 
@@ -53,6 +53,15 @@ class MailerSendHelper{
     var allVars = getAllVarsFromTicket(ticket);
 
     var templateId = await DataService.getEmailTemplate(TicketModel.reservedState, ticket.occasion!);
+    var metadata = EmailMetadataModel(template: templateId, subject: ticket.id!, recipient: ticket.customer!.email!, occasion: ticket.occasion!);
+    await DataService.emailWithAttachmentMailerSend(metadata, allVars, null);
+    ToastHelper.Show("E-mail byl odeslán na: ${ticket.customer!.email!}");
+  }
+
+  static Future<void> sendTicketStorno(TicketModel ticket) async {
+    var allVars = getAllVarsFromTicket(ticket);
+
+    var templateId = await DataService.getEmailTemplate(TicketModel.stornoState, ticket.occasion!);
     var metadata = EmailMetadataModel(template: templateId, subject: ticket.id!, recipient: ticket.customer!.email!, occasion: ticket.occasion!);
     await DataService.emailWithAttachmentMailerSend(metadata, allVars, null);
     ToastHelper.Show("E-mail byl odeslán na: ${ticket.customer!.email!}");
