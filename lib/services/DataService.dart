@@ -217,7 +217,7 @@ class DataService{
         fullTicket.state==TicketModel.paidState
     ))
     {
-      await _supabase.from(BoxModel.boxTable).update({BoxModel.stateColumn:BoxModel.availableType}).eq(BoxModel.idColumn, ticket.boxId);
+      await _supabase.from(BoxModel.boxTable).update({BoxModel.stateColumn:BoxModel.availableType}).eq(BoxModel.idColumn, fullTicket.boxId);
     }
     await _supabase.from(TicketModel.ticketOptionsTable).delete().eq(TicketModel.ticketOptionsTableTicket, ticket.id);
     await _supabase.from(TicketModel.ticketTable).delete().eq(TicketModel.idColumn, ticket.id);
