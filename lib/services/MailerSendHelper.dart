@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:ticketonline/models/EmailMetadataModel.dart';
 import 'package:ticketonline/models/TicketModel.dart';
@@ -13,20 +14,24 @@ class MailerSendHelper{
 
     List<Map<String, String>> allVars = getAllVarsFromTicket(ticket);
 
-    var ticketImage = DialogHelper.ticketImageContainer(ticket);
+    var attachment = await createAttachmentFromContainerWidget(DialogHelper.ticketImageContainer(ticket), ticket, ticket.toBasicString());
+    var templateId = await DataService.getEmailTemplate(TicketModel.paidState, ticket.occasion!);
+    var metadata = EmailMetadataModel(template: templateId, subject: ticket.id!, recipient: ticket.customer!.email!, occasion: ticket.occasion!);
+    await DataService.emailWithAttachmentMailerSend(metadata, allVars, attachment);
+    ToastHelper.Show("E-mail byl odeslán na: ${ticket.customer!.email!}");
+  }
+
+  static Future<Map<String, String>> createAttachmentFromContainerWidget(Container container, TicketModel ticket, String fileName) async {
+    var ticketImage = DialogHelper.qrPaymentContainer(ticket);
     ScreenshotController controller = ScreenshotController();
     var imageData = await controller.captureFromWidget(ticketImage);
     var imageEncoded = base64.encode(imageData);
 
     var attachment = {
-      "filename":"${ticket.toBasicString()}.png",
+      "filename":"$fileName.png",
       "content":imageEncoded
     };
-
-    var templateId = await DataService.getEmailTemplate(TicketModel.paidState, ticket.occasion!);
-    var metadata = EmailMetadataModel(template: templateId, subject: ticket.id!, recipient: ticket.customer!.email!, occasion: ticket.occasion!);
-    await DataService.emailWithAttachmentMailerSend(metadata, allVars, attachment);
-    ToastHelper.Show("E-mail byl odeslán na: ${ticket.customer!.email!}");
+    return attachment;
   }
 
   static List<Map<String, String>> getAllVarsFromTicket(TicketModel ticket) {
@@ -49,12 +54,13 @@ class MailerSendHelper{
     return allVars;
   }
 
-  static Future<void> sendTicketPurchased(TicketModel ticket) async {
+  static Future<void> sendTicketOrder(TicketModel ticket) async {
     var allVars = getAllVarsFromTicket(ticket);
 
     var templateId = await DataService.getEmailTemplate(TicketModel.reservedState, ticket.occasion!);
     var metadata = EmailMetadataModel(template: templateId, subject: ticket.id!, recipient: ticket.customer!.email!, occasion: ticket.occasion!);
-    await DataService.emailWithAttachmentMailerSend(metadata, allVars, null);
+    var attachment = await createAttachmentFromContainerWidget(DialogHelper.ticketImageContainer(ticket), ticket, "Údaje pro platbu vstupenky ${ticket.id}");
+    await DataService.emailWithAttachmentMailerSend(metadata, allVars, attachment);
     ToastHelper.Show("E-mail byl odeslán na: ${ticket.customer!.email!}");
   }
 

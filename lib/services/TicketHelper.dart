@@ -11,6 +11,6 @@ class TicketHelper {
     newTicket.customer = customer;
     var ticket = await DataService.updateTicket(newTicket);
     ticket.customer = customer;
-    await MailerSendHelper.sendTicketPurchased(ticket);
+    await MailerSendHelper.sendTicketOrder(ticket);
   }
 }

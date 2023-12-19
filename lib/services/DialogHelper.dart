@@ -47,7 +47,7 @@ class DialogHelper{
             title: Text(titleMessage),
             content: Screenshot(
               controller: screenshotController,
-              child: ticketImageContainer(ticket)),
+              child: qrPaymentContainer(ticket)),
             actions: [
               ElevatedButton(
                 child: const Text("Odeslat vstupenku (bez dalších akcí)"),
@@ -106,6 +106,49 @@ class DialogHelper{
                     eyeStyle: QrEyeStyle(color: Color(0xFFD3BFA0), eyeShape: QrEyeShape.square),),)
                   ],),
             );
+  }
+
+  static Container qrPaymentContainer(TicketModel ticket) {
+    var color = Colors.black;
+    var header = TextStyle(color: color, fontWeight: FontWeight.w700, fontSize: 20);
+    var placeTextStyle = TextStyle(color: color, fontWeight: FontWeight.w700, fontSize: 16);
+    return Container(
+      color: Colors.white,
+      width: 360,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Údaje pro platbu vstupenky ${ticket.id}", style: header),
+          ),
+          QrImageView(
+            data: "SPD*1.0*ACC:CZ4520100000002502719268*AM:${ticket.price}.00*CC:CZK*MSG:${ticket.customer.toString()}*X-VS:${ticket.id}",
+            version: QrVersions.auto,
+            size: 240,
+            gapless: false,
+            dataModuleStyle: QrDataModuleStyle(dataModuleShape: QrDataModuleShape.square, color: color),
+            eyeStyle: QrEyeStyle(color: color, eyeShape: QrEyeShape.square),),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Číslo účtu: 2502719268/2010", style: placeTextStyle,),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Částka: ${ticket.price} Kč", style: placeTextStyle,),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Variabilní symbol: ${ticket.id}", style: placeTextStyle,),
+          )
+          ,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Zpráva pro příjemce: ${ticket.customer.toString()}", style: placeTextStyle,),
+          )
+        ],),
+    );
   }
 
   static Future<bool> showConfirmationDialogAsync(
