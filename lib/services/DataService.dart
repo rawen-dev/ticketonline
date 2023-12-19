@@ -206,6 +206,10 @@ class DataService{
   static Future<void> deleteTicket(TicketModel ticket)
   async {
     var ticketData = await _supabase.from(TicketModel.ticketTable).select().eq(TicketModel.idColumn, ticket.id!).maybeSingle();
+    if(ticketData==null)
+    {
+      return;
+    }
     var fullTicket = TicketModel.fromJson(ticketData);
 
     if(fullTicket.boxId!=null&&(
