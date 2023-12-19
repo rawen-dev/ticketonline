@@ -35667,12 +35667,13 @@ return A.m(l.jc("id",k).Um(),$async$AD)
 case 3:p=c
 if(p==null){s=1
 break}o=A.b5F(p)
-if(o.y!=null){l=o.r
-l=l==="reserved"||l==="paid"}else l=!1
-s=l?4:5
+l=o.y
+if(l!=null){k=o.r
+k=k==="reserved"||k==="paid"}else k=!1
+s=k?4:5
 break
 case 4:s=6
-return A.m(n.fC(0,"boxes").cF(0,A.K(["type","available"],m,m)).jc("id",a.y),$async$AD)
+return A.m(n.fC(0,"boxes").cF(0,A.K(["type","available"],m,m)).jc("id",l),$async$AD)
 case 6:case 5:s=7
 return A.m(n.fC(0,"ticket_option").Sr(0).jc("ticket",a.a),$async$AD)
 case 7:s=8
