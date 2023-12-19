@@ -47,7 +47,7 @@ class DialogHelper{
             title: Text(titleMessage),
             content: Screenshot(
               controller: screenshotController,
-              child: ticketImageContainer(ticket)),
+              child: qrPaymentContainer(ticket)),
             actions: [
               ElevatedButton(
                 child: const Text("Odeslat vstupenku (bez dalších akcí)"),
@@ -101,7 +101,7 @@ class DialogHelper{
                     data: ticket.id.toString(),
                     version: QrVersions.auto,
                     size: 120,
-                    gapless: false,
+                    gapless: true,
                     dataModuleStyle: QrDataModuleStyle(dataModuleShape: QrDataModuleShape.square, color: Color(0xFFFD3BFA0)),
                     eyeStyle: QrEyeStyle(color: Color(0xFFD3BFA0), eyeShape: QrEyeShape.square),),)
                   ],),
@@ -121,7 +121,7 @@ class DialogHelper{
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("Údaje pro platbu vstupenky ${ticket.id}", style: header),
+            child: Text("Údaje pro zaplacení vstupenky ${ticket.id}", style: header),
           ),
           QrImageView(
             data: "SPD*1.0*ACC:CZ4520100000002502719268*AM:${ticket.price}.00*CC:CZK*MSG:${ticket.customer.toString()}*X-VS:${ticket.id}",

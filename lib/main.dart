@@ -52,6 +52,9 @@ final _router = GoRouter(
   ],
 );
 
+TextStyle textStyleBig = TextStyle(fontWeight: FontWeight.w900, fontSize: 16);
+
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -103,6 +106,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _isLoading = false;
   String title = "";
   int initialPrice = 0;
   int price = 0;
@@ -131,6 +135,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
+
     return Scaffold(
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
@@ -156,10 +162,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 const SizedBox(height: 32),
                 formBuilder!,
                 const SizedBox(height: 12),
-                Text("Celková cena: $price Kč"),
+                Text("Celková cena: $price Kč", style: textStyleBig,),
+                const SizedBox(height: 12),
+                HtmlWidget(occasion?.priceDescription??"",),
                 const SizedBox(height: 12),
                 ElevatedButton(
-                    onPressed: () async {
+                    onPressed: _isLoading ? null : () async {
                       TextInput.finishAutofillContext();
                       if (_formKey.currentState?.saveAndValidate() ?? false) {
                         if (true) {
@@ -184,6 +192,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 _formKey.currentState?.fields["food"]!.value,
                                 _formKey.currentState?.fields["taxi"]!.value
                               ]);
+                          setState(() {
+                            _isLoading = true;
+                          });
                           await TicketHelper.sendTicketOrder(customer, ticket);
                           await showGeneralDialog(
                             context: context,
@@ -247,7 +258,7 @@ class _MyHomePageState extends State<MyHomePage> {
     for (var element in taxis.options!) {
       taxiOptions.add(FormBuilderFieldOption<OptionModel>(value: element));
     }
-    var taxiGroup = FormBuilderRadioGroup<OptionModel>(orientation: OptionsOrientation.vertical, initialValue: taxis.options!.first, name: taxis.code!, options: taxiOptions, decoration: InputDecoration(labelText: taxis.name!, labelStyle: TextStyle(fontSize: 20)),);
+    var taxiGroup = FormBuilderRadioGroup<OptionModel>(orientation: OptionsOrientation.vertical, initialValue: taxis.options!.first, name: taxis.code!, options: taxiOptions, decoration: InputDecoration(labelText: taxis.name!, labelStyle: textStyleBig),);
 
     var foodOptions  = <FormBuilderFieldOption<OptionModel>>[];
     for (var element in foods.options!) {
@@ -266,7 +277,7 @@ class _MyHomePageState extends State<MyHomePage> {
         price = endPrice;
       });
     }
-    var foodGroup = FormBuilderRadioGroup<OptionModel>(orientation: OptionsOrientation.vertical, initialValue: foods.options!.first, name: foods.code!, options: foodOptions, decoration: InputDecoration(labelText: foods.name!),
+    var foodGroup = FormBuilderRadioGroup<OptionModel>(orientation: OptionsOrientation.vertical, initialValue: foods.options!.first, name: foods.code!, options: foodOptions, decoration: InputDecoration(labelText: foods.name!, labelStyle: textStyleBig),
     onChanged: chng,);
 
     formBuilder = FormBuilder(
@@ -276,7 +287,7 @@ class _MyHomePageState extends State<MyHomePage> {
             FormBuilderTextField(
               autofillHints: const [AutofillHints.givenName],
               name: CustomerModel.nameColumn,
-              decoration: const InputDecoration(labelText: 'Jméno'),
+              decoration: InputDecoration(labelText: 'Jméno', labelStyle: textStyleBig),
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(),
               ]),
@@ -285,7 +296,7 @@ class _MyHomePageState extends State<MyHomePage> {
             FormBuilderTextField(
               autofillHints: const [AutofillHints.familyName],
               name: CustomerModel.surnameColumn,
-              decoration: const InputDecoration(labelText: 'Příjmení'),
+              decoration: InputDecoration(labelText: 'Příjmení', labelStyle: textStyleBig),
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(),
               ]),
@@ -295,7 +306,7 @@ class _MyHomePageState extends State<MyHomePage> {
               autofillHints: const [AutofillHints.email],
               key: _emailFieldKey,
               name: CustomerModel.emailColumn,
-              decoration: const InputDecoration(labelText: 'E-mail'),
+              decoration: InputDecoration(labelText: 'E-mail', labelStyle: textStyleBig),
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(),
                 FormBuilderValidators.email(errorText: "Zadejte platný e-mail"),
@@ -306,7 +317,7 @@ class _MyHomePageState extends State<MyHomePage> {
               name: TicketModel.boxColumn,
               enableInteractiveSelection: false,
               readOnly: true,
-              decoration: const InputDecoration(labelText: 'Místo k sezení', suffixIcon: Icon(Icons.event_seat)),
+              decoration: InputDecoration(labelText: 'Místo k sezení', suffixIcon: Icon(Icons.event_seat), labelStyle: textStyleBig),
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(),
               ]),
@@ -335,7 +346,7 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 10),
             taxiGroup,
             const SizedBox(height: 10),
-            FormBuilderTextField(name: TicketModel.noteColumn, decoration: const InputDecoration(labelText: "Poznámka")),
+            FormBuilderTextField(name: TicketModel.noteColumn, decoration: InputDecoration(labelText: "Poznámka", labelStyle: textStyleBig)),
           ],
         ));
     setState(() {});
