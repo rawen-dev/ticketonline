@@ -168,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           //     ?.invalidate('Email already taken.');
                           // OR invalidate using Field Key
                           // _emailFieldKey.currentState?.invalidate('Email already taken.');
-                          var email = _formKey.currentState?.fields[CustomerModel.emailColumn]!.value;
+                          var email = _formKey.currentState?.fields[CustomerModel.emailColumn]!.value.toString().toLowerCase();
                           var name = _formKey.currentState?.fields[CustomerModel.nameColumn]!.value;
                           var surname = _formKey.currentState?.fields[CustomerModel.surnameColumn]!.value;
                           var note = _formKey.currentState?.fields[TicketModel.noteColumn]!.value;
