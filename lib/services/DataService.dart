@@ -205,7 +205,16 @@ class DataService{
   
   static Future<void> deleteTicket(TicketModel ticket)
   async {
-    await _supabase.from(BoxModel.boxTable).update({BoxModel.stateColumn:BoxModel.availableType}).eq(BoxModel.idColumn, ticket.box!.id!);
+    var ticketData = await _supabase.from(TicketModel.ticketTable).select().eq(TicketModel.idColumn, ticket.id!).maybeSingle();
+    var fullTicket = TicketModel.fromJson(ticketData);
+
+    if(fullTicket.boxId!=null&&(
+        fullTicket.state==TicketModel.reservedState ||
+        fullTicket.state==TicketModel.paidState
+    ))
+    {
+      await _supabase.from(BoxModel.boxTable).update({BoxModel.stateColumn:BoxModel.availableType}).eq(BoxModel.idColumn, ticket.boxId);
+    }
     await _supabase.from(TicketModel.ticketOptionsTable).delete().eq(TicketModel.ticketOptionsTableTicket, ticket.id);
     await _supabase.from(TicketModel.ticketTable).delete().eq(TicketModel.idColumn, ticket.id);
   }
