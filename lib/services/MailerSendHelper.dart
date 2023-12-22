@@ -22,9 +22,8 @@ class MailerSendHelper{
   }
 
   static Future<Map<String, String>> createAttachmentFromContainerWidget(Container container, TicketModel ticket, String fileName) async {
-    var ticketImage = DialogHelper.qrPaymentContainer(ticket);
     ScreenshotController controller = ScreenshotController();
-    var imageData = await controller.captureFromWidget(ticketImage);
+    var imageData = await controller.captureFromWidget(container);
     var imageEncoded = base64.encode(imageData);
 
     var attachment = {
