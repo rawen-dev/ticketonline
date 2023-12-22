@@ -229,13 +229,21 @@ class DataService{
     {
       await _supabase.from(TicketModel.ticketOptionsTable).delete().eq(TicketModel.ticketOptionsTableTicket, ticket.id);
       await _supabase.from(BoxModel.boxTable).update({BoxModel.stateColumn: BoxModel.availableType}).eq(BoxModel.idColumn, ticket.box!.id!);
+      await _supabase.from(TicketModel.ticketTable).update(
+      {
+        TicketModel.boxColumn: null,
+        TicketModel.stateColumn: state
+      })
+      .eq(TicketModel.idColumn, ticket.id);
     }
-    await _supabase.from(TicketModel.ticketTable).update(
-    {
-      TicketModel.boxColumn: null,
-      TicketModel.stateColumn: state
-    })
-    .eq(TicketModel.idColumn, ticket.id);
+    else{
+      await _supabase.from(TicketModel.ticketTable).update(
+      {
+        TicketModel.stateColumn: state
+      })
+      .eq(TicketModel.idColumn, ticket.id);
+    }
+
   }
 
   static Future<TicketModel> updateTicket(TicketModel ticket)
