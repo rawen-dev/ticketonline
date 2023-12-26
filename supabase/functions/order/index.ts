@@ -44,9 +44,6 @@ Deno.serve(async (req) => {
     .select("id")
     .eq("email", orderData["customer"]["email"])
     .maybeSingle();
-    
-    console.log(data);
-
 
     if(data===null)
     {
@@ -57,8 +54,6 @@ Deno.serve(async (req) => {
       .single());
     }
 
-    console.log(data);
-
     var boxIds = Object.keys(orderData["options"]["box"]);
     let ticketResponse = await _supabase
       .from("tickets")
@@ -68,9 +63,9 @@ Deno.serve(async (req) => {
         "state":"reserved",
         "price":price,
         "occasion":orderData["occasion"],
+        "note":orderData["options"]["note"]??"",
     }).select("id").single();
     
-    console.log(ticketResponse.data);
 
     await _supabase
     .from("boxes")
@@ -78,14 +73,10 @@ Deno.serve(async (req) => {
     .eq("id", boxIds[0]);
 
     for(let opt of optionsIds) {
-      console.log(ticketResponse.data!["id"]);
       await _supabase
       .from("ticket_option")
       .insert({"ticket":ticketResponse.data!["id"], "option":opt});
     }
-    let toReturn = "{ id: "+ticketResponse.data!.id+"}";
-    console.log(toReturn);
-    JSON.stringify(ticketResponse.data)
 
     return new Response(JSON.stringify(ticketResponse.data), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
