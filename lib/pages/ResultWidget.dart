@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:ticketonline/models/TicketModel.dart';
+import 'package:ticketonline/models/OrderModel.dart';
 import 'dart:html' as html;
 
 
 class ResultWidget extends StatefulWidget {
-  final TicketModel ticketModel;
+  final OrderModel ticketModel;
   ResultWidget({Key? key, required this.ticketModel}) : super(key: key);
   @override
   State<ResultWidget> createState() => _ResultWidgetState(ticketModel);
 }
 
 class _ResultWidgetState extends State<ResultWidget> {
-  final TicketModel ticketModel;
+  final OrderModel orderModel;
 
-  _ResultWidgetState(this.ticketModel);
+  _ResultWidgetState(this.orderModel);
 
 
   @override
@@ -33,7 +33,7 @@ class _ResultWidgetState extends State<ResultWidget> {
                   Icon(Icons.check_circle)
                 ],
               ),
-              Text("Další informace nalezneš na svém mailu (${ticketModel.customer?.email}). Těšíme se na setkání!"),
+              Text("Další informace nalezneš na svém mailu (${orderModel.email}). Těšíme se na setkání!"),
               const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: () {

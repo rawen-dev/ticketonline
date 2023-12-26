@@ -58,7 +58,7 @@ class MailerSendHelper{
 
     var templateId = await DataService.getEmailTemplate(TicketModel.reservedState, ticket.occasion!);
     var metadata = EmailMetadataModel(template: templateId, subject: ticket.id!, recipient: ticket.customer!.email!, occasion: ticket.occasion!);
-    var attachment = await createAttachmentFromContainerWidget(DialogHelper.ticketImageContainer(ticket), ticket, "Údaje pro zaplacení vstupenky ${ticket.id}");
+    var attachment = await createAttachmentFromContainerWidget(DialogHelper.qrPaymentContainer(ticket), ticket, "Údaje pro zaplacení vstupenky ${ticket.id}");
     await DataService.emailWithAttachmentMailerSend(metadata, allVars, attachment);
     ToastHelper.Show("E-mail byl odeslán na: ${ticket.customer!.email!}");
   }

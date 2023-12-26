@@ -8,6 +8,7 @@ import 'package:ticketonline/models/EmailMetadataModel.dart';
 import 'package:ticketonline/models/OccasionModel.dart';
 import 'package:ticketonline/models/OptionGroupModel.dart';
 import 'package:ticketonline/models/OptionModel.dart';
+import 'package:ticketonline/models/OrderModel.dart';
 import 'package:ticketonline/models/RoomModel.dart';
 import 'package:ticketonline/models/TicketModel.dart';
 import 'package:ticketonline/models/UserInfoModel.dart';
@@ -124,6 +125,12 @@ class DataService{
     }
   }
 
+  static Future<int> orderTicket(OrderModel order)
+  async {
+    var response = await _supabase.functions.invoke("order", body: order.toJson());
+    return response.data["id"];
+  }
+
   static Future<CustomerModel> updateCustomer(CustomerModel customer)
   async {
     var userData = await _supabase.from(CustomerModel.customerTable).upsert(customer.toJson()).select().single();
@@ -134,42 +141,51 @@ class DataService{
     return _supabase.auth.currentUser?.id;
   }
 
-  static Future<List<TicketModel>> getAllTickets()
+  static Future<List<TicketModel>> getAllTickets([int occasionId = 0, List<int>? ids])
   async {
-    var occasionId = await getCurrentUserOccasion();
+    if(occasionId==0)
+    {
+      occasionId = await getCurrentUserOccasion();
+    }
 
-    var data = await _supabase
-        .from(TicketModel.ticketTable)
-        .select(
-        "${TicketModel.idColumn},"
-            "${TicketModel.priceColumn},"
-            "${TicketModel.createdAtColumn},"
-            "${TicketModel.stateColumn},"
-            "${TicketModel.noteColumn},"
-            "${TicketModel.hiddenNoteColumn},"
-            "${BoxModel.boxTable}"
+    var dataQuery = _supabase
+    .from(TicketModel.ticketTable)
+    .select(
+    "${TicketModel.idColumn},"
+        "${TicketModel.priceColumn},"
+        "${TicketModel.createdAtColumn},"
+        "${TicketModel.stateColumn},"
+        "${TicketModel.noteColumn},"
+        "${TicketModel.hiddenNoteColumn},"
+        "${BoxModel.boxTable}"
+          "("
+            "${BoxModel.idColumn},"
+            "${BoxModel.nameColumn},"
+            "${BoxGroupModel.boxGroupsTable}"
               "("
-                "${BoxModel.idColumn},"
-                "${BoxModel.nameColumn},"
-                "${BoxGroupModel.boxGroupsTable}"
-                  "("
-                    "${BoxGroupModel.idColumn},"
-                    "${BoxGroupModel.nameColumn}"
-                  ")"
-              "),"
-            "${CustomerModel.customerTable}"
-              "("
-                "${CustomerModel.idColumn},"
-                "${CustomerModel.nameColumn},"
-                "${CustomerModel.surnameColumn},"
-                "${CustomerModel.emailColumn}"
-              "),"
-            "${TicketModel.ticketOptionsTable}"
-              "("
-                "${TicketModel.ticketOptionsTableOption}"
+                "${BoxGroupModel.idColumn},"
+                "${BoxGroupModel.nameColumn}"
               ")"
-        )
-        .eq(TicketModel.occasionColumn, occasionId);
+          "),"
+        "${CustomerModel.customerTable}"
+          "("
+            "${CustomerModel.idColumn},"
+            "${CustomerModel.nameColumn},"
+            "${CustomerModel.surnameColumn},"
+            "${CustomerModel.emailColumn}"
+          "),"
+        "${TicketModel.ticketOptionsTable}"
+          "("
+            "${TicketModel.ticketOptionsTableOption}"
+          ")"
+    )
+    .eq(TicketModel.occasionColumn, occasionId);
+
+    if(ids!=null)
+    {
+      dataQuery = dataQuery.in_(TicketModel.idColumn, ids);
+    }
+    var data = await dataQuery;
     var tickets = List<TicketModel>.from(
         data.map((x) => TicketModel.fromJson(x)));
     var optionGroups = await getAllOptionGroups(occasionId);

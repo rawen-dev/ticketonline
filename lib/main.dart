@@ -6,8 +6,9 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ticketonline/Config.dart';
+import 'package:ticketonline/models/OptionGroupModel.dart';
+import 'package:ticketonline/models/OrderModel.dart';
 import 'package:ticketonline/pages/DashboardPage.dart';
-import 'package:ticketonline/pages/InfoWidget.dart';
 import 'package:ticketonline/pages/LoginPage.dart';
 import 'package:ticketonline/pages/ResultWidget.dart';
 import 'package:ticketonline/pages/SeatReservationWidget.dart';
@@ -176,26 +177,28 @@ class _MyHomePageState extends State<MyHomePage> {
                           //     ?.invalidate('Email already taken.');
                           // OR invalidate using Field Key
                           // _emailFieldKey.currentState?.invalidate('Email already taken.');
-                          var email = _formKey.currentState?.fields[CustomerModel.emailColumn]!.value.toString().toLowerCase();
-                          var name = _formKey.currentState?.fields[CustomerModel.nameColumn]!.value;
-                          var surname = _formKey.currentState?.fields[CustomerModel.surnameColumn]!.value;
-                          var note = _formKey.currentState?.fields[TicketModel.noteColumn]!.value;
-                          var place = selectedSeats.firstOrNull;
+                          var order = OrderModel();
+                          order.occasion = occasion!.id!;
+                          order.email = _formKey.currentState?.fields[CustomerModel.emailColumn]!.value.toString().toLowerCase();
+                          order.name = _formKey.currentState?.fields[CustomerModel.nameColumn]!.value;
+                          order.surname = _formKey.currentState?.fields[CustomerModel.surnameColumn]!.value;
+                          order.note = _formKey.currentState?.fields[TicketModel.noteColumn]!.value;
+                          order.box = {selectedSeats.first.id!.toString():selectedSeats.first.toString()};
+                          var foodOption = _formKey.currentState?.fields[OptionGroupModel.foodOption]!.value as OptionModel;
+                          var taxiOption = _formKey.currentState?.fields[OptionGroupModel.taxiOption]!.value as OptionModel;
 
-                          var customer = CustomerModel(email: email, name: name, surname: surname);
+                          order.options = {
+                            foodOption.id!.toString(): foodOption
+                                .toStringWithPrice(),
+                            taxiOption.id!.toString(): taxiOption
+                                .toStringWithPrice()
+                          };
 
-                          var ticket = TicketModel(occasion: occasion!.id,
-                              price: price,
-                              note: note,
-                              box: place,
-                              options: [
-                                _formKey.currentState?.fields["food"]!.value,
-                                _formKey.currentState?.fields["taxi"]!.value
-                              ]);
                           setState(() {
                             _isLoading = true;
                           });
-                          await TicketHelper.sendTicketOrder(customer, ticket);
+                          await TicketHelper.sendTicketOrder(order);
+
                           await showGeneralDialog(
                             context: context,
                             barrierColor: Colors.black12.withOpacity(0.6), // Background color
@@ -203,7 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             barrierLabel: 'Dialog',
                             transitionDuration: const Duration(milliseconds: 300),
                             pageBuilder: (context, __, ___) {
-                              return ResultWidget(ticketModel: ticket,);
+                              return ResultWidget(ticketModel: order,);
                             },
                           );
                         }

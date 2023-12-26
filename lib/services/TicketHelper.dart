@@ -1,16 +1,12 @@
-import 'package:ticketonline/models/CustomerModel.dart';
-import 'package:ticketonline/models/TicketModel.dart';
+import 'package:ticketonline/models/OrderModel.dart';
 import 'package:ticketonline/services/DataService.dart';
 import 'package:ticketonline/services/MailerSendHelper.dart';
 
 class TicketHelper {
-  static Future<void> sendTicketOrder(CustomerModel newCustomer, TicketModel newTicket)
+  static Future<void> sendTicketOrder(OrderModel order)
   async {
-    var customer = await DataService.getCustomerByEmail(newCustomer.email!);
-    customer ??= await DataService.updateCustomer(newCustomer);
-    newTicket.customer = customer;
-    var ticket = await DataService.updateTicket(newTicket);
-    ticket.customer = customer;
+    var ticketId = await DataService.orderTicket(order);
+    var ticket = (await DataService.getAllTickets(order.occasion!, [ticketId])).first;
     await MailerSendHelper.sendTicketOrder(ticket);
   }
 }
