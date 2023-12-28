@@ -81,10 +81,18 @@ class TicketModel extends IPlutoRowModel {
   }
 
   Map<String, dynamic> toJson() {
-    var map = {
-      stateColumn: state??reservedState,
-      priceColumn: price,
-    };
+
+    Map<String, dynamic> map = {};
+    if(price!=null)
+    {
+      map[priceColumn] = price;
+    }
+
+    if(state!=null)
+    {
+      map[stateColumn] = state;
+    }
+
     var boxIdValue = boxId??box?.id;
     if(boxIdValue != null)
     {
