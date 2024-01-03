@@ -361,25 +361,45 @@ class DataService{
 
   static Future<List<BoxModel>> getAllBoxes(int occasionId)
   async {
+    var boxGroups = await DataService.getAllBoxGroups(occasionId);
+
     var data = await _supabase
         .from(BoxModel.boxTable)
-        .select(
-        "${BoxModel.idColumn},"
-        "${BoxModel.stateColumn},"
-        "${BoxModel.occasionColumn},"
-        "${BoxModel.roomColumn},"
-        "${BoxModel.nameColumn},"
-        "${BoxModel.yColumn},"
-        "${BoxModel.xColumn},"
-        "${BoxGroupModel.boxGroupsTable}("
-            "${BoxGroupModel.idColumn},"
-            "${BoxGroupModel.nameColumn},"
-            "${BoxGroupModel.roomColumn},"
-            "${BoxGroupModel.occasionColumn})")
+        .select()
         .eq(BoxModel.occasionColumn, occasionId);
-
-    return List<BoxModel>.from(
+    var boxes = List<BoxModel>.from(
         data.map((x) => BoxModel.fromJson(x)));
+
+    for(var bg in boxGroups){
+      var assign = boxes.where((element) => element.boxGroupId == bg.id).toList();
+      bg.boxes = assign;
+      for(var b in assign)
+      {
+        b.boxGroup = bg;
+      }
+    }
+
+    for(var b in boxes)
+    {
+      if(b.boxGroupId == null)
+      {
+        continue;
+      }
+      var bg = boxGroups.firstWhere((element) => element.id == b.boxGroupId);
+      b.boxGroup = bg;
+    }
+    return boxes;
+  }
+
+  static Future<List<BoxGroupModel>> getAllBoxGroups(int occasionId)
+  async {
+    var data = await _supabase
+        .from(BoxGroupModel.boxGroupsTable)
+        .select()
+        .eq(BoxGroupModel.occasionColumn, occasionId);
+
+    return List<BoxGroupModel>.from(
+        data.map((x) => BoxGroupModel.fromJson(x)));
   }
 
   static Future<void> updateBoxes(List<BoxModel> boxes)

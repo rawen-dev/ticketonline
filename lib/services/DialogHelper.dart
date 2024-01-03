@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_downloader_web/image_downloader_web.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:select_dialog/select_dialog.dart';
+import 'package:ticketonline/models/BoxGroupModel.dart';
 import 'package:ticketonline/models/OptionGroupModel.dart';
 import 'package:ticketonline/models/TicketModel.dart';
 import 'package:ticketonline/services/MailerSendHelper.dart';
@@ -231,5 +233,38 @@ class DialogHelper{
       },
     );
     return result;
+  }
+
+  static Future<BoxGroupModel?> chooseBoxGroup(
+      BuildContext context,
+      List<BoxGroupModel> locales
+      ) async {
+    BoxGroupModel? selectedLocale;
+    await SelectDialog.showModal<BoxGroupModel>(
+      context,
+      label: "Zvol stůl",
+      items: locales,
+      showSearchBox: false,
+      selectedValue: selectedLocale,
+      itemBuilder:
+          (BuildContext context, BoxGroupModel item, bool isSelected) {
+        return Container(
+          decoration: !isSelected
+              ? null
+              : BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Colors.white,
+            border: Border.all(
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+          child: TextButton(onPressed: null, child: Text(item.name??""),),
+        );
+      },
+      onChange: (selected) {
+        selectedLocale = selected;
+      },
+    );
+    return selectedLocale;
   }
 }

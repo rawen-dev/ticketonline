@@ -61,7 +61,7 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                 const SizedBox(
                   height: 16,
                 ),
-                Text(room?.name??"", style: TextStyle(fontWeight: FontWeight.bold),),
+                Text(room?.name??"", style: const TextStyle(fontWeight: FontWeight.bold),),
                 const SizedBox(
                   height: 16,
                 ),
@@ -212,7 +212,7 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Visibility(
-                      visible: DataService.isEditor,
+                      visible: DataService.isLoggedIn(),
                       child: ElevatedButton(
                         onPressed: () async {
                           Set<BoxGroupModel> tables = {};
@@ -228,6 +228,29 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                           ToastHelper.Show("Vytvořen stůl ${newTableName}.");
                         },
                         child: const Text("přidat stůl"),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Visibility(
+                      visible: DataService.isLoggedIn(),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          Set<BoxGroupModel> tables = {};
+                          tables.addAll(currentBoxes!.where((element) => element.boxGroup!=null).map((e) => e.boxGroup!));
+                          var selectedTable = await DialogHelper.chooseBoxGroup(context, tables.toList());
+                          if(selectedTable==null)
+                          {
+                            return;
+                          }
+                          var result = await DialogHelper.showConfirmationDialogAsync(context, "Přidání ke stolu", "Chcete přidat židle ke stolu ${selectedTable!.name!}?");
+                          if(!result)
+                          {
+                            return;
+                          }
+                          currentBoxGroup = selectedTable;
+                          ToastHelper.Show("Nyní přidáváte ke stolu ${selectedTable.name}.");
+                        },
+                        child: const Text("přidat ke stolu"),
                       ),
                     ),
                     const SizedBox(width: 12),
