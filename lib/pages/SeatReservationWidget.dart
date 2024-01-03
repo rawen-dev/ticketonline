@@ -242,7 +242,7 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
                           {
                             return;
                           }
-                          var result = await DialogHelper.showConfirmationDialogAsync(context, "Přidání ke stolu", "Chcete přidat židle ke stolu ${selectedTable!.name!}?");
+                          var result = await DialogHelper.showConfirmationDialogAsync(context, "Přidání ke stolu", "Chcete přidat židle ke stolu ${selectedTable.name!}?");
                           if(!result)
                           {
                             return;
