@@ -98,15 +98,20 @@ class DialogHelper{
                     padding: EdgeInsets.fromLTRB(205, 365, 0,  0),
                     child: Text(ticket.options?.firstWhereOrNull((element) => element.optionGroup!.code==OptionGroupModel.foodOption)?.name??"", style: foodTextStyle)),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(810, 260, 0,  0),
-                  child: QrImageView(
-                    data: ticket.id.toString(),
-                    version: QrVersions.auto,
-                    size: 120,
-                    gapless: true,
-                    dataModuleStyle: QrDataModuleStyle(dataModuleShape: QrDataModuleShape.square, color: Color(0xFFFD3BFA0)),
-                    eyeStyle: QrEyeStyle(color: Color(0xFFD3BFA0), eyeShape: QrEyeShape.square),),)
-                  ],),
+                  padding: EdgeInsets.fromLTRB(795, 240, 0,  0),
+                  child: Column(
+                    children: [
+                      QrImageView(
+                      data: ticket.id.toString(),
+                      version: QrVersions.auto,
+                      size: 120,
+                      gapless: true,
+                      dataModuleStyle: QrDataModuleStyle(dataModuleShape: QrDataModuleShape.square, color: Color(0xFFFD3BFA0)),
+                      eyeStyle: QrEyeStyle(color: Color(0xFFD3BFA0), eyeShape: QrEyeShape.square),),
+                      Container(width: 140, height: 40, alignment: Alignment.center, child: Text("ID vstupenky: ${ticket.id!}", style: const TextStyle(color: Color(0xFFFD3BFA0), fontWeight: FontWeight.w700, fontSize: 16)))
+                    ],
+                  ),),
+                ],),
             );
   }
 
