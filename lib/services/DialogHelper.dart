@@ -82,7 +82,7 @@ class DialogHelper{
 
   static Container ticketImageContainer(TicketModel ticket) {
     var placeTextStyle = TextStyle(color: Color(0xFFF6EBD8), fontWeight: FontWeight.w700, fontSize: 26);
-    var foodTextStyle = TextStyle(color: Color(0xFFF6EBD8), fontWeight: FontWeight.w700, fontSize: 16);
+    var foodTextStyle = TextStyle(color: Color(0xFFF6EBD8), fontWeight: FontWeight.w700, fontSize: 19);
     return Container(
               width: 1024,
               child: Stack(
@@ -95,7 +95,7 @@ class DialogHelper{
                     padding: EdgeInsets.fromLTRB(205, 324, 0,  0),
                     child: Text(ticket.box!.name!, style: placeTextStyle)),
                 Padding(
-                    padding: EdgeInsets.fromLTRB(205, 365, 0,  0),
+                    padding: EdgeInsets.fromLTRB(205, 360, 0,  0),
                     child: Text(ticket.options?.firstWhereOrNull((element) => element.optionGroup!.code==OptionGroupModel.foodOption)?.name??"", style: foodTextStyle)),
                 Padding(
                   padding: EdgeInsets.fromLTRB(795, 240, 0,  0),
