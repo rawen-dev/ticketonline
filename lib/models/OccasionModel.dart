@@ -7,10 +7,12 @@ class OccasionModel{
   static const String linkColumn = "link";
   static const String descriptionColumn = "description";
   static const String priceDescriptionColumn = "price_description";
+  static const String isEnabledColumn = "is_enabled";
 
   int? id;
   int? price;
   DateTime? createdAt;
+  bool? isEnabled;
   String? name;
   String? link;
   String? description;
@@ -20,6 +22,7 @@ class OccasionModel{
     this.id,
     this.price,
     this.createdAt,
+    this.isEnabled,
     this.name,
     this.link,
     this.description,
@@ -30,6 +33,7 @@ class OccasionModel{
     return OccasionModel(
       id: json[idColumn],
       createdAt: DateTime.parse(json[createdAtColumn]),
+      isEnabled: json[isEnabledColumn],
       name: json[nameColumn],
       price: json[priceColumn],
       link: json[linkColumn],

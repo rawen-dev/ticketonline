@@ -9,6 +9,7 @@ import 'package:ticketonline/Config.dart';
 import 'package:ticketonline/models/OptionGroupModel.dart';
 import 'package:ticketonline/models/OrderModel.dart';
 import 'package:ticketonline/pages/DashboardPage.dart';
+import 'package:ticketonline/pages/InfoWidget.dart';
 import 'package:ticketonline/pages/LoginPage.dart';
 import 'package:ticketonline/pages/ResultWidget.dart';
 import 'package:ticketonline/pages/SeatReservationWidget.dart';
@@ -226,16 +227,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void loadData() async {
-    // await showGeneralDialog(
-    //   context: context,
-    //   barrierColor: Colors.black12.withOpacity(0.6), // Background color
-    //   barrierDismissible: false,
-    //   barrierLabel: 'Dialog',
-    //   transitionDuration: const Duration(milliseconds: 300),
-    //   pageBuilder: (context, __, ___) {
-    //     return InfoWidget();
-    //   },
-    // );
     occasion = await DataService.getOccasionModelByLink(occasionLink??"");
     if(occasion == null)
     {
@@ -249,6 +240,21 @@ class _MyHomePageState extends State<MyHomePage> {
         return;
       }
     }
+    if(!occasion!.isEnabled!)
+    {
+      var text = "Rezervace vstupenek pro ${occasion!.name!} není k dipozici.";
+      await showGeneralDialog(
+        context: context,
+        barrierColor: Colors.black12.withOpacity(0.6), // Background color
+        barrierDismissible: false,
+        barrierLabel: 'Dialog',
+        transitionDuration: const Duration(milliseconds: 300),
+        pageBuilder: (context, __, ___) {
+          return InfoWidget(text: text);
+        },
+      );
+    }
+
     title = occasion!.name??"";
     initialPrice = occasion!.price??0;
     price = initialPrice;

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ticketonline/models/TicketModel.dart';
-import 'dart:html' as html;
 
 
 class InfoWidget extends StatefulWidget {
-  InfoWidget({Key? key}) : super(key: key);
+  final String text;
+  InfoWidget({Key? key, required this.text}) : super(key: key);
   @override
   State<InfoWidget> createState() => _InfoWidgetState();
 }
@@ -24,7 +23,7 @@ class _InfoWidgetState extends State<InfoWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Rezervace vstupenek je pro dnešek pozastavena.", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                    Text(widget.text, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
                     SizedBox(width: 6,),
                   ],
                 ),
