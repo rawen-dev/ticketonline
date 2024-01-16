@@ -24,6 +24,9 @@ class OptionGroupModel{
     this.options,
   });
 
+  Iterable<OptionModel> getAvailableOptions() => options!.where((element) => !element.isHidden!);
+
+
   static OptionGroupModel fromJson(Map<String, dynamic> json) {
     var optionGroup = OptionGroupModel(
       id: json[idColumn],

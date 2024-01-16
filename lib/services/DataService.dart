@@ -303,7 +303,8 @@ class DataService{
         "("
         "${OptionModel.idColumn},"
         "${OptionModel.nameColumn},"
-        "${OptionModel.priceColumn}"
+        "${OptionModel.priceColumn},"
+        "${OptionModel.isHiddenColumn}"
         ")")
         .eq(OptionGroupModel.occasionColumn, occasionId);
     var d = List<OptionGroupModel>.from(

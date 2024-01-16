@@ -258,13 +258,13 @@ class _MyHomePageState extends State<MyHomePage> {
     var foods = groups.firstWhere((element) => element.id == 2);
 
     var taxiOptions  = <FormBuilderFieldOption<OptionModel>>[];
-    for (var element in taxis.options!) {
+    for (var element in taxis.getAvailableOptions()) {
       taxiOptions.add(FormBuilderFieldOption<OptionModel>(value: element));
     }
     var taxiGroup = FormBuilderRadioGroup<OptionModel>(orientation: OptionsOrientation.vertical, initialValue: taxis.options!.first, name: taxis.code!, options: taxiOptions, decoration: InputDecoration(labelText: taxis.name!, labelStyle: textStyleBig),);
 
     var foodOptions  = <FormBuilderFieldOption<OptionModel>>[];
-    for (var element in foods.options!) {
+    for (var element in foods.getAvailableOptions()) {
       foodOptions.add(FormBuilderFieldOption(value: element, child: Text(element.toStringWithPrice()),));
     }
 
