@@ -1,6 +1,3 @@
-
-import 'dart:typed_data';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -76,6 +73,10 @@ class _CheckPageState extends State<CheckPage> {
             child: Expanded(
               child: MobileScanner(
                 fit: BoxFit.fitHeight,
+                controller: MobileScannerController(
+                    formats: [BarcodeFormat.qrCode],
+                    detectionSpeed: DetectionSpeed.noDuplicates,
+                    torchEnabled: true),
                 onDetect: (capture) async {
                   final List<Barcode> barcodes = capture.barcodes;
                   var id = barcodes.firstOrNull;
