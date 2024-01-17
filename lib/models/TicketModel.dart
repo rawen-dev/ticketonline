@@ -33,10 +33,11 @@ class TicketModel extends IPlutoRowModel {
 
   static const String reservedState = "reserved";
   static const String paidState = "paid";
+  static const String usedState = "used";
   static const String stornoState = "storno";
 
 
-  static const states = [reservedState, paidState, stornoState];
+  static const states = [reservedState, paidState, stornoState, usedState];
 
   int? id;
   DateTime? createdAt;

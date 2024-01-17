@@ -8,6 +8,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ticketonline/Config.dart';
 import 'package:ticketonline/models/OptionGroupModel.dart';
 import 'package:ticketonline/models/OrderModel.dart';
+import 'package:ticketonline/pages/CheckPage.dart';
 import 'package:ticketonline/pages/DashboardPage.dart';
 import 'package:ticketonline/pages/InfoWidget.dart';
 import 'package:ticketonline/pages/LoginPage.dart';
@@ -42,6 +43,10 @@ final _router = GoRouter(
     GoRoute(
       path: DashboardPage.ROUTE,
       builder: (context, state) => const DashboardPage(),
+    ),
+    GoRoute(
+      path: CheckPage.ROUTE,
+      builder: (context, state) => const CheckPage(),
     ),
     GoRoute(
     path: LoginPage.ROUTE,
