@@ -46,29 +46,30 @@ class _CheckPageState extends State<CheckPage> {
         children: [
           Container(padding: const EdgeInsets.all(12.0),
             child:
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Text("ID: ${ticketId??""}"),
+                  Text("JMÉNO: ${ticket?.customer.toString()??""}"),
+                  Text("STAV: ${ticket?.state.toString()??""}"),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text("ID: ${ticketId??""}"),
-                      Text("JMÉNO: ${ticket?.customer.toString()??""}"),
-                      Text("STAV: ${ticket?.state.toString()??""}"),
-                    ],),
-                  ElevatedButton(
-                    onPressed: ticket == null || ticket!.state != TicketModel.paidState ? null : () async {
-                      await DataService.updateTicketState(ticket!, TicketModel.usedState);
-                      var ticketList = await DataService.getAllTickets(currentOccasion!, [ticket!.id!]);
-                      setState(() {
-                        ticket = ticketList.firstOrNull;
-                      });
-                      ToastHelper.Show("Vstup byl potvrzen.");
-                    },
-                    child: Text("Potvrdit vstup"),
-                    ),
-                ]
-              ),),
+                      ElevatedButton(
+                        onPressed: ticket == null || ticket!.state != TicketModel.paidState ? null : () async {
+                          await DataService.updateTicketState(ticket!, TicketModel.usedState);
+                          var ticketList = await DataService.getAllTickets(currentOccasion!, [ticket!.id!]);
+                          setState(() {
+                            ticket = ticketList.firstOrNull;
+                          });
+                          ToastHelper.Show("Vstup byl potvrzen.");
+                        },
+                        child: Text("Potvrdit vstup"),
+                      ),
+                    ]
+                  )
+                ],),),
           Container(
             child: Expanded(
               child: MobileScanner(
