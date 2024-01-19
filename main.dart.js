@@ -40093,7 +40093,7 @@ $1(a){var s=$.e5
 s=(s==null?$.e5=A.k8(self.window.flutterConfiguration):s).b
 if(s==null)s=null
 else{s=s.canvasKitBaseUrl
-if(s==null)s=null}return(s==null?"https://www.gstatic.com/flutter-canvaskit/4a585b79294e830fa89c24924d58a27cc8fbf406/":s)+a},
+if(s==null)s=null}return(s==null?"https://www.gstatic.com/flutter-canvaskit/6e2ea58a5ccbefcfadc2d4b7b8045fc6c20ab812/":s)+a},
 $S:50}
 A.b3z.prototype={
 $1(a){this.a.remove()
@@ -126674,7 +126674,7 @@ p=q==null
 o=m.x
 n=m.y
 if(p)q=A.a([],t.WM)
-p=A.a7k(new A.lr(1,B.dn,new A.bE(o*14,n*14,new A.a4J(new A.aIB(n,o,q,m.Q,14,i,j,k,h,"assets/svg_empty_space.svg"),new A.b_Y(m),l),l),l),!1,!1,!1,!p)
+p=A.a7k(new A.lr(1,B.dn,new A.bE(o*10,n*10,new A.a4J(new A.aIB(n,o,q,m.Q,10,i,j,k,h,"assets/svg_empty_space.svg"),new A.b_Y(m),l),l),l),!1,!1,!1,!p)
 q=$.fd().Q
 q===$&&A.b()
 q=q.d!=null
