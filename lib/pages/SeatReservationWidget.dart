@@ -45,7 +45,7 @@ class _SeatReservationWidgetState extends State<SeatReservationWidget> {
   List<SeatModel> changedBoxes = [];
   List<SeatModel> allBoxes = [];
 
-  static const int boxSize = 14;
+  static const int boxSize = 10;
   selectionMode currentSelectionMode = selectionMode.normal;
 
   @override
