@@ -34,11 +34,14 @@ class _CheckPageState extends State<CheckPage> {
     if(DataService.currentUserId()==null)
     {
       context.go(LoginPage.ROUTE);
+      mobileScannerController.stop();
       return;
     }
     currentOccasion = await DataService.getCurrentUserOccasion();
   }
-
+  MobileScannerController mobileScannerController = MobileScannerController(
+      formats: [BarcodeFormat.qrCode],
+      detectionSpeed: DetectionSpeed.noDuplicates);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +59,7 @@ class _CheckPageState extends State<CheckPage> {
                       right: 0,
                       child: ElevatedButton.icon(
                         onPressed: () {
+                          mobileScannerController.stop();
                           context.go(DashboardPage.ROUTE);
                         },
                         icon: const Icon(
@@ -102,9 +106,7 @@ class _CheckPageState extends State<CheckPage> {
             Expanded(
               child: MobileScanner(
                 fit: BoxFit.fitWidth,
-                controller: MobileScannerController(
-                    formats: [BarcodeFormat.qrCode],
-                    detectionSpeed: DetectionSpeed.noDuplicates),
+                controller: mobileScannerController,
                 onDetect: (capture) async {
                   final List<Barcode> barcodes = capture.barcodes;
                   var id = barcodes.firstOrNull;
