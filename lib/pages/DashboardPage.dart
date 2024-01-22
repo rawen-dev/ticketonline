@@ -68,9 +68,11 @@ class _DashboardPageState extends State<DashboardPage> {
           actions: [
             Padding(
               padding: const EdgeInsets.all(6),
-              child: IconButton(onPressed: () async {
-                context.go(CheckPage.ROUTE);
-              }, icon: const Icon(Icons.qr_code_scanner)),
+              child: ElevatedButton.icon(
+                  onPressed: () async {
+                context.go(CheckPage.ROUTE);},
+                icon: const Icon(Icons.qr_code_scanner), label: const Text("Skenovat"),
+              ),
             )
           ],
           bottom: const PreferredSize(

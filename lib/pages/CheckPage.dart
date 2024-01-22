@@ -42,99 +42,101 @@ class _CheckPageState extends State<CheckPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(padding: const EdgeInsets.all(12.0),
-            decoration: ticket == null || ticket!.state != TicketModel.paidState ? BoxDecoration(color: Colors.redAccent, border: Border.all(width: 3, color: Colors.red)) : BoxDecoration(color: Colors.greenAccent, border: Border.all(width: 3, color: Colors.green)),
-            child:
-              Stack(
-                children:[
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        context.go(DashboardPage.ROUTE);
-                      },
-                      icon: Icon(
-                        Icons.list_outlined,
-                        size: 24.0,
+      body: Container(
+        decoration: ticket == null ? null : ticket!.state != TicketModel.paidState ? BoxDecoration(color: Colors.redAccent) : BoxDecoration(color: Colors.greenAccent),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(padding: const EdgeInsets.all(12.0),
+              child:
+                Stack(
+                  children:[
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          context.go(DashboardPage.ROUTE);
+                        },
+                        icon: const Icon(
+                          Icons.list_outlined,
+                          size: 24.0,
+                        ),
+                        label: const Text("Dashboard"),
                       ),
-                      label: const Text("Dashboard"),
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("ID: ${ticketId??""}"),
-                      Text("JMÉNO: ${ticket?.customer.toString()??""}"),
-                      Text("STAV: ${ticket?.state.toString()??""}"),
-                      Text("SEDADLO: ${ticket?.box.toString()??""}"),
-                      Text("JÍDLO: ${ticket?.foodOption()??""}"),
-                      Text("CENA: ${ticket?.price.toString()??""}"),
-                      Text("ODVOZ: ${ticket?.taxiOption().toString()??""}"),
-                      Text("POZNÁMKA: ${ticket?.note.toString()??""}"),
-                      Text("SKRYTÁ POZNÁMKA: ${ticket?.hiddenNote.toString()??""}"),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("ID: ${ticketId??""}"),
+                        Text("JMÉNO: ${ticket?.customer.toString()??""}"),
+                        Text("STAV: ${ticket?.state.toString()??""}"),
+                        Text("SEDADLO: ${ticket?.box.toString()??""}"),
+                        Text("JÍDLO: ${ticket?.foodOption()??""}"),
+                        Text("CENA: ${ticket?.price.toString()??""}"),
+                        Text("ODVOZ: ${ticket?.taxiOption().toString()??""}"),
+                        Text("POZNÁMKA: ${ticket?.note.toString()??""}"),
+                        Text("SKRYTÁ POZNÁMKA: ${ticket?.hiddenNote.toString()??""}"),
 
-                      const SizedBox(height: 12),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ElevatedButton(
-                              onPressed: ticket == null || ticket!.state != TicketModel.paidState ? null : () async {
-                                await DataService.updateTicketState(ticket!, TicketModel.usedState);
-                                var ticketList = await DataService.getAllTickets(currentOccasion!, [ticket!.id!]);
-                                setState(() {
-                                  ticket = ticketList.firstOrNull;
-                                });
-                                ToastHelper.Show("Vstup byl potvrzen.");
-                              },
-                              child: Text("Potvrdit vstup"),
-                            ),
-                          ]
-                      )
-                    ],)
-                ],
-              ),),
-          Container(
-            child: Expanded(
-              child: MobileScanner(
-                fit: BoxFit.fitHeight,
-                controller: MobileScannerController(
-                    formats: [BarcodeFormat.qrCode],
-                    detectionSpeed: DetectionSpeed.noDuplicates),
-                onDetect: (capture) async {
-                  final List<Barcode> barcodes = capture.barcodes;
-                  var id = barcodes.firstOrNull;
-                  if(id!=null)
-                  {
-                    debugPrint(id.rawValue);
-                    var newTicketId = int.tryParse(id.rawValue!);
-                    if(ticketId==newTicketId)
+                        const SizedBox(height: 12),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton(
+                                onPressed: ticket == null || ticket!.state != TicketModel.paidState ? null : () async {
+                                  await DataService.updateTicketState(ticket!, TicketModel.usedState);
+                                  var ticketList = await DataService.getAllTickets(currentOccasion!, [ticket!.id!]);
+                                  setState(() {
+                                    ticket = ticketList.firstOrNull;
+                                  });
+                                  ToastHelper.Show("Vstup byl potvrzen.");
+                                },
+                                child: Text("Potvrdit vstup"),
+                              ),
+                            ]
+                        )
+                      ],)
+                  ],
+                ),),
+            Container(
+              child: Expanded(
+                child: MobileScanner(
+                  fit: BoxFit.fitHeight,
+                  controller: MobileScannerController(
+                      formats: [BarcodeFormat.qrCode],
+                      detectionSpeed: DetectionSpeed.noDuplicates),
+                  onDetect: (capture) async {
+                    final List<Barcode> barcodes = capture.barcodes;
+                    var id = barcodes.firstOrNull;
+                    if(id!=null)
                     {
-                      return;
+                      debugPrint(id.rawValue);
+                      var newTicketId = int.tryParse(id.rawValue!);
+                      if(ticketId==newTicketId)
+                      {
+                        return;
+                      }
+
+                      setState(() {
+                        ticketId=newTicketId;
+                      });
+
+                      if(ticketId==null || currentOccasion==null)
+                      {
+                        return;
+                      }
+
+                      var ticketList = await DataService.getAllTickets(currentOccasion!, [ticketId!]);
+                      setState(() {
+                        ticket = ticketList.firstOrNull;
+                      });
                     }
-
-                    setState(() {
-                      ticketId=newTicketId;
-                    });
-
-                    if(ticketId==null || currentOccasion==null)
-                    {
-                      return;
-                    }
-
-                    var ticketList = await DataService.getAllTickets(currentOccasion!, [ticketId!]);
-                    setState(() {
-                      ticket = ticketList.firstOrNull;
-                    });
-                  }
-                },
+                  },
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
