@@ -43,11 +43,11 @@ class _CheckPageState extends State<CheckPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: ticket == null ? null : ticket!.state != TicketModel.paidState ? BoxDecoration(color: Colors.redAccent) : BoxDecoration(color: Colors.greenAccent),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(padding: const EdgeInsets.all(12.0),
+              decoration: ticket == null ? null : ticket!.state != TicketModel.paidState ? BoxDecoration(color: Colors.redAccent) : BoxDecoration(color: Colors.greenAccent),
               child:
                 Stack(
                   children:[
@@ -68,6 +68,7 @@ class _CheckPageState extends State<CheckPage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const SizedBox(height: 18),
                         Text("ID: ${ticketId??""}"),
                         Text("JMÉNO: ${ticket?.customer.toString()??""}"),
                         Text("STAV: ${ticket?.state.toString()??""}"),
@@ -98,41 +99,39 @@ class _CheckPageState extends State<CheckPage> {
                       ],)
                   ],
                 ),),
-            Container(
-              child: Expanded(
-                child: MobileScanner(
-                  fit: BoxFit.fitHeight,
-                  controller: MobileScannerController(
-                      formats: [BarcodeFormat.qrCode],
-                      detectionSpeed: DetectionSpeed.noDuplicates),
-                  onDetect: (capture) async {
-                    final List<Barcode> barcodes = capture.barcodes;
-                    var id = barcodes.firstOrNull;
-                    if(id!=null)
+            Expanded(
+              child: MobileScanner(
+                fit: BoxFit.fitWidth,
+                controller: MobileScannerController(
+                    formats: [BarcodeFormat.qrCode],
+                    detectionSpeed: DetectionSpeed.noDuplicates),
+                onDetect: (capture) async {
+                  final List<Barcode> barcodes = capture.barcodes;
+                  var id = barcodes.firstOrNull;
+                  if(id!=null)
+                  {
+                    debugPrint(id.rawValue);
+                    var newTicketId = int.tryParse(id.rawValue!);
+                    if(ticketId==newTicketId)
                     {
-                      debugPrint(id.rawValue);
-                      var newTicketId = int.tryParse(id.rawValue!);
-                      if(ticketId==newTicketId)
-                      {
-                        return;
-                      }
-
-                      setState(() {
-                        ticketId=newTicketId;
-                      });
-
-                      if(ticketId==null || currentOccasion==null)
-                      {
-                        return;
-                      }
-
-                      var ticketList = await DataService.getAllTickets(currentOccasion!, [ticketId!]);
-                      setState(() {
-                        ticket = ticketList.firstOrNull;
-                      });
+                      return;
                     }
-                  },
-                ),
+
+                    setState(() {
+                      ticketId=newTicketId;
+                    });
+
+                    if(ticketId==null || currentOccasion==null)
+                    {
+                      return;
+                    }
+
+                    var ticketList = await DataService.getAllTickets(currentOccasion!, [ticketId!]);
+                    setState(() {
+                      ticket = ticketList.firstOrNull;
+                    });
+                  }
+                },
               ),
             ),
           ],
