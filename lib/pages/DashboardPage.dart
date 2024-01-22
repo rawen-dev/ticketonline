@@ -9,6 +9,7 @@ import 'package:ticketonline/dataGrids/SingleTableDataGrid.dart';
 import 'package:ticketonline/models/OptionGroupModel.dart';
 import 'package:ticketonline/models/OptionModel.dart';
 import 'package:ticketonline/models/TicketModel.dart';
+import 'package:ticketonline/pages/CheckPage.dart';
 import 'package:ticketonline/pages/LoginPage.dart';
 import 'package:ticketonline/services/DataService.dart';
 import 'package:ticketonline/services/DialogHelper.dart';
@@ -64,6 +65,14 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Scaffold(
           appBar: AppBar(
           title: const Text("Dashboard"),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(6),
+              child: IconButton(onPressed: () async {
+                context.go(CheckPage.ROUTE);
+              }, icon: const Icon(Icons.qr_code_scanner)),
+            )
+          ],
           bottom: const PreferredSize(
             preferredSize: Size.fromHeight(40),
             child: Align(

@@ -130,10 +130,11 @@ class TicketModel extends IPlutoRowModel {
     );
   }
 
+  OptionModel? foodOption() => options?.firstWhereOrNull((o)=>o.optionGroup!.code == OptionGroupModel.foodOption);
+  OptionModel? taxiOption() => options?.firstWhereOrNull((o)=>o.optionGroup!.code == OptionGroupModel.taxiOption);
+
   @override
   PlutoRow toPlutoRow() {
-    var foodOption = options?.firstWhereOrNull((o)=>o.optionGroup!.code == OptionGroupModel.foodOption);
-    var taxiOption = options?.firstWhereOrNull((o)=>o.optionGroup!.code == OptionGroupModel.taxiOption);
 
     return PlutoRow(cells: {
       idColumn: PlutoCell(value: id),
@@ -145,8 +146,8 @@ class TicketModel extends IPlutoRowModel {
       hiddenNoteColumn: PlutoCell(value: hiddenNote),
       boxColumn: PlutoCell(value: box??""),
       priceColumn: PlutoCell(value: price),
-      foodOptionsColumn: PlutoCell(value: foodOption),
-      taxiOptionsColumn: PlutoCell(value: taxiOption),
+      foodOptionsColumn: PlutoCell(value: foodOption()),
+      taxiOptionsColumn: PlutoCell(value: taxiOption()),
     });
   }
 
