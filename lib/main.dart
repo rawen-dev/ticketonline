@@ -272,7 +272,7 @@ class _MyHomePageState extends State<MyHomePage> {
     for (var element in taxis.getAvailableOptions()) {
       taxiOptions.add(FormBuilderFieldOption<OptionModel>(value: element));
     }
-    var taxiGroup = FormBuilderRadioGroup<OptionModel>(orientation: OptionsOrientation.vertical, initialValue: taxis.options!.first, name: taxis.code!, options: taxiOptions, decoration: InputDecoration(labelText: taxis.name!, labelStyle: textStyleBig),);
+    var taxiGroup = FormBuilderRadioGroup<OptionModel>(orientation: OptionsOrientation.vertical, initialValue: taxis.getAvailableOptions().first, name: taxis.code!, options: taxiOptions, decoration: InputDecoration(labelText: taxis.name!, labelStyle: textStyleBig),);
 
     var foodOptions  = <FormBuilderFieldOption<OptionModel>>[];
     for (var element in foods.getAvailableOptions()) {
@@ -291,7 +291,7 @@ class _MyHomePageState extends State<MyHomePage> {
         price = endPrice;
       });
     }
-    var foodGroup = FormBuilderRadioGroup<OptionModel>(orientation: OptionsOrientation.vertical, initialValue: foods.options!.first, name: foods.code!, options: foodOptions, decoration: InputDecoration(labelText: foods.name!, labelStyle: textStyleBig),
+    var foodGroup = FormBuilderRadioGroup<OptionModel>(orientation: OptionsOrientation.vertical, initialValue: foods.getAvailableOptions().first, name: foods.code!, options: foodOptions, decoration: InputDecoration(labelText: foods.name!, labelStyle: textStyleBig),
     onChanged: chng,);
 
     formBuilder = FormBuilder(
