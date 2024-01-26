@@ -87,7 +87,7 @@ class DialogHelper{
               width: 1024,
               child: Stack(
                   children: [
-                Image(image: AssetImage("assets/vstupenky.png"),),
+                Image(image: AssetImage("assets/vstupenky.png"), fit: BoxFit.fitWidth,),
                 Padding(
                   padding: EdgeInsets.fromLTRB(205, 290, 0,  0),
                   child: Text(ticket.box!.boxGroup!.name!, style: placeTextStyle)),
@@ -199,8 +199,10 @@ class DialogHelper{
       BuildContext context,
       String titleMessage,
       String hint,
-      String confirmButtonMessage,
-      String cancelButtonMessage,
+      {
+        String confirmButtonMessage = "Ok",
+        String cancelButtonMessage = "Storno"
+      }
       ) async {
     final TextEditingController _messageController = TextEditingController();
     String? result;

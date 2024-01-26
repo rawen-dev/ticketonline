@@ -6,6 +6,7 @@ import 'package:ticketonline/models/TicketModel.dart';
 import 'package:ticketonline/pages/DashboardPage.dart';
 import 'package:ticketonline/pages/LoginPage.dart';
 import 'package:ticketonline/services/DataService.dart';
+import 'package:ticketonline/services/DialogHelper.dart';
 import 'package:ticketonline/services/ToastHelper.dart';
 
 class CheckPage extends StatefulWidget {
@@ -89,6 +90,17 @@ class _CheckPageState extends State<CheckPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             ElevatedButton(
+                              onPressed: () async {
+                                var id = await DialogHelper.showTextInputDialog(context, "Zadej id", "zde");
+                                int? idNum;
+                                if(id!=null){
+                                  idNum = int.tryParse(id);
+                                }
+                                await setupNewId(idNum);
+                              },
+                              child: const Text("Zadat id"),
+                            ),
+                            ElevatedButton(
                               onPressed: ticket == null ||
                                       ticket!.state != TicketModel.paidState
                                   ? null
@@ -104,7 +116,7 @@ class _CheckPageState extends State<CheckPage> {
                                       ToastHelper.Show("Vstup byl potvrzen.");
                                     },
                               child: const Text("Potvrdit vstup"),
-                            ),
+                            )
                           ])
                     ],
                   )
@@ -118,27 +130,12 @@ class _CheckPageState extends State<CheckPage> {
                 onDetect: (capture) async {
                   final List<Barcode> barcodes = capture.barcodes;
                   var id = barcodes.firstOrNull;
-                  if (id != null) {
-                    debugPrint(id.rawValue);
-                    var newTicketId = int.tryParse(id.rawValue!);
-                    if (ticketId == newTicketId) {
-                      return;
-                    }
-
-                    setState(() {
-                      ticketId = newTicketId;
-                    });
-
-                    if (ticketId == null || currentOccasion == null) {
-                      return;
-                    }
-
-                    var ticketList = await DataService.getAllTickets(
-                        currentOccasion!, [ticketId!]);
-                    setState(() {
-                      ticket = ticketList.firstOrNull;
-                    });
+                  if(id==null){
+                    return;
                   }
+                  debugPrint(id.rawValue);
+                  var newTicketId = int.tryParse(id.rawValue!);
+                  await setupNewId(newTicketId);
                 },
               ),
             ),
@@ -146,6 +143,28 @@ class _CheckPageState extends State<CheckPage> {
         ),
       ),
     );
+  }
+
+  Future<void> setupNewId(int? newTicketId) async {
+    if (newTicketId != null) {
+      if (ticketId == newTicketId) {
+        return;
+      }
+
+      setState(() {
+        ticketId = newTicketId;
+      });
+
+      if (ticketId == null || currentOccasion == null) {
+        return;
+      }
+
+      var ticketList = await DataService.getAllTickets(
+          currentOccasion!, [ticketId!]);
+      setState(() {
+        ticket = ticketList.firstOrNull;
+      });
+    }
   }
 
   BoxDecoration getResultColor() {
