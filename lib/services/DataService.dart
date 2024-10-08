@@ -183,7 +183,7 @@ class DataService{
 
     if(ids!=null)
     {
-      dataQuery = dataQuery.in_(TicketModel.idColumn, ids);
+      dataQuery = dataQuery.inFilter(TicketModel.idColumn, ids);
     }
     var data = await dataQuery;
     var tickets = List<TicketModel>.from(
@@ -213,7 +213,7 @@ class DataService{
     var occasion = await _supabase
         .from(UserInfoModel.userOccasionTable)
         .select()
-        .eq(UserInfoModel.userOccasionUserColumn, currentUserId())
+        .eq(UserInfoModel.userOccasionUserColumn, currentUserId()!)
         .limit(1);
     var occasionId = occasion[0][UserInfoModel.userOccasionOccasionColumn];
     return occasionId;
@@ -233,31 +233,31 @@ class DataService{
         fullTicket.state==TicketModel.paidState
     ))
     {
-      await _supabase.from(BoxModel.boxTable).update({BoxModel.stateColumn:BoxModel.availableType}).eq(BoxModel.idColumn, fullTicket.boxId);
+      await _supabase.from(BoxModel.boxTable).update({BoxModel.stateColumn:BoxModel.availableType}).eq(BoxModel.idColumn, fullTicket.boxId!);
     }
-    await _supabase.from(TicketModel.ticketOptionsTable).delete().eq(TicketModel.ticketOptionsTableTicket, ticket.id);
-    await _supabase.from(TicketModel.ticketTable).delete().eq(TicketModel.idColumn, ticket.id);
+    await _supabase.from(TicketModel.ticketOptionsTable).delete().eq(TicketModel.ticketOptionsTableTicket, ticket.id!);
+    await _supabase.from(TicketModel.ticketTable).delete().eq(TicketModel.idColumn, ticket.id!);
   }
 
   static Future<void> updateTicketState(TicketModel ticket, String state)
   async {
     if(state==TicketModel.stornoState)
     {
-      await _supabase.from(TicketModel.ticketOptionsTable).delete().eq(TicketModel.ticketOptionsTableTicket, ticket.id);
+      await _supabase.from(TicketModel.ticketOptionsTable).delete().eq(TicketModel.ticketOptionsTableTicket, ticket.id!);
       await _supabase.from(BoxModel.boxTable).update({BoxModel.stateColumn: BoxModel.availableType}).eq(BoxModel.idColumn, ticket.box!.id!);
       await _supabase.from(TicketModel.ticketTable).update(
       {
         TicketModel.boxColumn: null,
         TicketModel.stateColumn: state
       })
-      .eq(TicketModel.idColumn, ticket.id);
+      .eq(TicketModel.idColumn, ticket.id!);
     }
     else{
       await _supabase.from(TicketModel.ticketTable).update(
       {
         TicketModel.stateColumn: state
       })
-      .eq(TicketModel.idColumn, ticket.id);
+      .eq(TicketModel.idColumn, ticket.id!);
     }
 
   }
@@ -267,7 +267,7 @@ class DataService{
     dynamic data;
     if(ticket.id!=null)
     {
-      data = await _supabase.from(TicketModel.ticketTable).update(ticket.toJson()).eq(TicketModel.idColumn, ticket.id).select().single();
+      data = await _supabase.from(TicketModel.ticketTable).update(ticket.toJson()).eq(TicketModel.idColumn, ticket.id!).select().single();
     }
     else
     {
