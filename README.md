@@ -1,4 +1,4 @@
 # TicketOnline
 
-This project is now integrated as part of the [Festapp](https://festapp.net) repository.  
-Continue your journey on [Festapp.net](https://festapp.net) or search for "Festapp" on GitHub.
+This project has been integrated as part of the [Festapp repository](https://github.com/vkh-cr/festapp).  
+Discover more about the project on [Festapp.net](https://festapp.net) or search for "festapp" on GitHub.
